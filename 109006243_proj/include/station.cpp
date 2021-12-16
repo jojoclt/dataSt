@@ -2,6 +2,7 @@
 
 #include <iostream>
 Station::Station() {
+    elecAmt = 0;
 }
 Station::Station(int elec, int lady, int road) {
     elecAmt = elec;
