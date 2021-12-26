@@ -12,14 +12,6 @@ Station::Station(int elec, int lady, int road) {
     ladyID = new int[ladyAmt];
     roadID = new int[roadAmt];
 }
-// Station::Station(const Station &s) {
-//     elecAmt = s.elecAmt;
-//     ladyAmt = s.ladyAmt;
-//     roadAmt = s.roadAmt;
-//     elecID = s.elecID;
-//     ladyID = s.ladyID;
-//     roadID = s.roadID;
-// }
 // Station &Station::operator=(const Station &s) {
 //     elecAmt = s.elecAmt;
 //     ladyAmt = s.ladyAmt;
@@ -29,3 +21,7 @@ Station::Station(int elec, int lady, int road) {
 //     roadID = s.roadID;
 //     return *this;
 // }
+bool Station::Rent(int bt, int uID, int time) {
+    return true;
+}
+int

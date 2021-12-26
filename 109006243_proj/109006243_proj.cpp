@@ -2,17 +2,19 @@
 #include <iostream>
 #include <string>
 
+#include "./include/bikeType.hpp"
+#include "./include/price.hpp"
 #include "./include/station.hpp"
 
 using namespace std;
 
 // g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 int map[105][105];
-Station *station[105];
-int bikeRate[3][2];
-string bikeType[] = {"electric", "lady", "road"};
-int waitFee, reduceRate, rateofTransfer;
+Station station[105];
 // elec lady road - disc/reg price
+Price bikeRate[3];
+
+int waitFee, reduceRate, rateofTransfer;
 
 int main() {
     ifstream input;
@@ -33,7 +35,7 @@ int main() {
     while (input) {
         int ID, elecAmt, ladyAmt, roadAmt;
         input >> ID >> elecAmt >> ladyAmt >> roadAmt;
-        station[ID] = new Station(elecAmt, ladyAmt, roadAmt);
+        station[ID] = Station(elecAmt, ladyAmt, roadAmt);
     }
     input.close();
 
@@ -42,12 +44,10 @@ int main() {
 
     while (input) {
         string type;
-        int rate[2];
+        Price rate;
         for (int i = 0; i < 3; i++) {
-            input >> type >> rate[0] >> rate[1];
-            for (int j = 0; j < 3; j++) {
-                if (type == bikeType[j]) bikeRate[j][0] = rate[0], bikeRate[j][1] = rate[1];
-            }
+            input >> type >> rate.slow >> rate.fast;
+            bikeRate[toBike(type)] = rate;
         }
         input >> waitFee >> reduceRate >> rateofTransfer;
     }
@@ -57,12 +57,19 @@ int main() {
     if (!input.is_open()) cout << "<<USER NOT OPENED>>", exit(0);
 
     while (input) {
+        string t;
+        input >> t;
+        int ID, userID, time;
         string type;
-        input >> type;
-        if (type == "rent") {
-            // stationIdRent bikeType userId timeRent
-        } else if (type == "return") {
-            // stationIdReturn userId timeReturn
+        if (t == "rent") {
+            // stationIdRent bikeType userId(5digit) timeRent
+            input >> ID >> type >> userID >> time;
+            station[ID].Rent(toBike(type), userID, time);
+        } else if (t == "return") {
+            // stationIdReturn userId timeReturn0-1440
+            input >> ID >> userID >> time;
+            station[ID].Return(userID, time);
+            // USER MUST HAVE BIKE VAR
         }
     }
 }
