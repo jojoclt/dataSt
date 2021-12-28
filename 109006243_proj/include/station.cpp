@@ -1,27 +1,42 @@
 #include "station.hpp"
 
 #include <iostream>
-Station::Station() {
-    elecAmt = 0;
-}
+
+#include "uid.hpp"
+
 Station::Station(int elec, int lady, int road) {
-    elecAmt = elec;
-    ladyAmt = lady;
-    roadAmt = road;
-    elecID = new int[elecAmt];
-    ladyID = new int[ladyAmt];
-    roadID = new int[roadAmt];
+    bikeCount[0] = elec, bikeCount[1] = lady, bikeCount[2] = road;
+    bikeID[0] = fillBike(elec), bikeID[1] = fillBike(lady), bikeID[2] = fillBike(road);
 }
-// Station &Station::operator=(const Station &s) {
-//     elecAmt = s.elecAmt;
-//     ladyAmt = s.ladyAmt;
-//     roadAmt = s.roadAmt;
-//     elecID = s.elecID;
-//     ladyID = s.ladyID;
-//     roadID = s.roadID;
-//     return *this;
-// }
-bool Station::Rent(int bt, int uID, int time) {
-    return true;
+Status Station::Rent(int bt, int uID, int time) {
+    // Check if bike is available
+    if (bikeCount[bt]) {
+        userID[uID].Rent(bt, bikeID[bt][0], time);
+        RemoveBike(bt);
+        return Accept;
+    }
+    return Reject;
 }
-int
+void Station::Return(int ID, int time) {
+    addBike(userID[ID].type);
+    return;
+}
+int* Station::fillBike(int x) {
+    int* arr = new int[x];
+    for (int i = 0; i < x; i++) arr[i] = i;
+    return arr;
+}
+
+void Station::RemoveBike(int bt) {
+    bikeCount[bt]--;
+    for (int i = 0; i < bikeCount[bt]; i++) {
+        bikeID[bt][i] = bikeID[bt][i + 1];
+    }
+}
+void Station::addBike(int bt, int) {
+    int l = 0, r = bikeCount[x] - 1;
+    while (l <= r) {
+        int mid = (l + r) >> 1;
+        if (bikeID[x][mid])
+    }
+}
