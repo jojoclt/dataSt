@@ -40,13 +40,15 @@ void Station::addBike(int type, pii bike) {
     int l = 0, r = bikeCount[type] - 1;
     while (l <= r) {
         int mid = (l + r) >> 1;
-        std::cout << bikeID[type][mid].first << " " << bikeID[type][mid].second << std::endl;
+        // std::cout << bikeID[type][mid].first << " " << bikeID[type][mid].second << std::endl;
         if (bike < bikeID[type][mid]) {
             r = mid - 1;
         } else
             l = mid + 1;
     }
-    std::cout << l;
+    // std::cout << l << "y";
+    bikeID[type].insert(l, bike);
+    bikeCount[type]++;
 }
 
 // int main() {
