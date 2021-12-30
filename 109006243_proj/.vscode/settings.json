@@ -3,6 +3,18 @@
         "iostream": "cpp",
         "fstream": "cpp",
         "string": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "scoped_allocator": "cpp",
+        "span": "cpp",
+        "regex": "cpp"
     }
 }

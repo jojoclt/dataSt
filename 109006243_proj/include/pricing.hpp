@@ -3,11 +3,11 @@
 
 #include <string.h>
 
+#include "pii.hpp"
+
 int map[105][105];
 int waitFee, reduceRate, rateofTransfer;
-struct Price {
-    int slow, fast;
-} bikeRate[3];
+pii bikeRate[3];
 // elec lady road - disc/reg price
 
 void initMap() {
