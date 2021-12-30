@@ -9,10 +9,10 @@ struct pii {
         second = p.second;
         return *this;
     }
-    bool operator<(pii& p) const {
+    bool operator<(pii p) const {
         return (first < p.first) || (first == p.first && second < p.second);
     }
-    bool operator>(pii& p) const {
+    bool operator>(pii p) const {
         return (first > p.first) || (first == p.first && second > p.second);
     }
     bool operator==(const pii& p) { return p.first == first && p.second == second; }

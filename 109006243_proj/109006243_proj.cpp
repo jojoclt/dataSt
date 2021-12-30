@@ -7,9 +7,9 @@
 
 using namespace std;
 
-static int DEBUG = 1;
+static int DEBUG = 0;
 // g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
-Station station[105];
+Station station[101];
 
 int toBike(string b) {
     if (b == "electric") return 0;
@@ -77,8 +77,8 @@ int main() {
             }
         }
     } else {
-        // cout << "X";
-        station[1] = Station(1, 2, 3, 4);
-        // station[1].printBike(3);
+        cout << "X";
+        station[0] = Station(0, 2, 3, 4);
+        station[0].printBike(1);
     }
 }

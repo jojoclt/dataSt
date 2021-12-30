@@ -21,9 +21,12 @@ void Station::Return(int ID, int time) {
     user[ID].Return();
     return;
 }
-pii* Station::fillBike(int ID, int x) {
-    pii* arr = new pii[x];
-    for (int i = 0; i < x; i++) arr[i] = {ID, i};
+Vector<pii> Station::fillBike(int ID, int x) {
+    Vector<pii> arr(x);
+    for (int i = 0; i < x; i++) {
+        arr.push_back(pii(ID, i));
+    }
+
     return arr;
 }
 
@@ -46,9 +49,9 @@ void Station::addBike(int type, pii bike) {
     std::cout << l;
 }
 
-int main() {
-    Station* station = new Station(0, 2, 3, 4);
-    station->RemoveBike(2);
-    station->printBike(2);
-    station->addBike(2, {-1, 1});
-}
+// int main() {
+//     Station* station = new Station(0, 2, 3, 4);
+//     station->RemoveBike(2);
+//     station->printBike(2);
+//     station->addBike(2, {-1, 1});
+// }

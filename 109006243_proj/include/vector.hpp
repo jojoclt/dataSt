@@ -17,7 +17,17 @@ class Vector {
         first = new T[0];
         last = curr = first;
     }
-    ~Vector() { delete[] first; }
+    Vector(int s) {
+        first = new T[s];
+        curr = first;
+        last = first + s * sizeof(T);
+    }
+    Vector(const Vector<T>& obj) {
+        first = obj.first;
+        curr = obj.curr;
+        last = obj.last;
+    }
+    ~Vector() {}
     T operator[](const int pos) {
         return first[pos];
     }

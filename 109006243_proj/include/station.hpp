@@ -7,12 +7,13 @@
 #include "pii.hpp"
 #include "status.hpp"
 #include "user.hpp"
+#include "vector.hpp"
 static int money = 0;
 class Station {
    public:
     int bikeCount[3];
     // sID bikeID
-    pii *bikeID[3];
+    Vector<pii> bikeID[3];
     Station() {}
     Station(int sID, int elec, int lady, int road);
     // Station(const Station &s);
@@ -29,7 +30,7 @@ class Station {
 
    public:
     int sID;
-    pii *fillBike(int sID, int x);
+    Vector<pii> fillBike(int sID, int x);
     void RemoveBike(int bt);
     void addBike(int bt, pii bike);
 };
