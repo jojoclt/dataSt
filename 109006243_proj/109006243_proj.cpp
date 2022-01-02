@@ -11,13 +11,15 @@ static int DEBUG = 0;
 // g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 Station station[101];
 
-int toBike(string b) {
+int toBike(string b)
+{
     if (b == "electric") return 0;
     if (b == "lady") return 1;
     if (b == "road") return 2;
     return 0;
 }
-int main() {
+int main()
+{
     if (!DEBUG) {
         ifstream input;
 
@@ -69,18 +71,15 @@ int main() {
                 // stationIdRent bikeType userId(5digit) timeRent
                 input >> ID >> type >> userID >> time;
                 station[ID].Rent(toBike(type), userID, time);
-            } else if (t == "return") {
+            }
+            else if (t == "return") {
                 // stationIdReturn userId timeReturn0-1440
                 input >> ID >> userID >> time;
                 station[ID].Return(userID, time);
                 // USER MUST HAVE BIKE VAR
             }
         }
-    } else {
-        // station[0] = Station(0, 2, 3, 4);
-        // // cout << station[0].bikeCount[2];
-        // station[0].addBike(2, pii(3, 22));
-        // station[0].printBike(2);
-        // // cout << "X";
     }
+    // station[1] = Station(1, 2, 3, 4);
+    for (int i = 0; i <= 100; i++) station[i].printStation_1();
 }
