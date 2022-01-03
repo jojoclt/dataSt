@@ -7,10 +7,16 @@
 
 using namespace std;
 
-static int DEBUG = 0;
-// g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
+int DEBUG = 0;
+/*
+g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
+./109006243_proj
+*/
 Station station[101];
-
+extern int money;
+extern int map[105][105];
+extern int waitFee, reduceRate, rateofTransfer;
+extern pii bikeRate[3];
 int toBike(string b) {
     if (b == "electric") return 0;
     if (b == "lady") return 1;
@@ -68,7 +74,7 @@ int main() {
             if (t == "rent") {
                 // stationIdRent bikeType userId(5digit) timeRent
                 input >> ID >> type >> userID >> time;
-                station[ID].Rent(toBike(type), userID, time);
+                station[ID].Rent(toBike(type), userID, time, ID);
             } else if (t == "return") {
                 // stationIdReturn userId timeReturn0-1440
                 input >> ID >> userID >> time;
@@ -84,4 +90,9 @@ int main() {
         // station[0].printBike(2);
         // // cout << "X";
     }
+    // station[1] = Station(1, 2, 3, 4);
+    for (int i = 0; i <= 100; i++) station[i].printStation_1();
+    std::cout << money;
 }
+
+// TODO SOMETIMES SEGMENTATION FAULT !!! IS IT VECTOR ALLOCATION??

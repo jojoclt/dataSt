@@ -2,21 +2,52 @@
 
 #include <iostream>
 
-#include "pii.hpp"
 template <typename T>
-void Vector<T>::push_back(T val) {
+Vector<T>::Vector()
+{
+    first = new T[0];
+    last = curr = first;
+}
+
+template <typename T>
+Vector<T>::~Vector()
+{
+    if (first != nullptr) delete[] first;
+}
+template <typename T>
+Vector<T>::Vector(const Vector<T>& obj)
+{
+    if (first != nullptr) delete[] first;
+    first = curr = last = nullptr;
+    reserve(obj.size());
+    for (int i = 0; i < obj.size(); i++) push_back(obj[i]);
+}
+template <typename T>
+Vector<T>& Vector<T>::operator=(const Vector<T>& obj)
+{
+    if (first != nullptr) delete[] first;
+    first = curr = last = nullptr;
+    reserve(obj.size());
+    for (int i = 0; i < obj.size(); i++) push_back(obj[i]);
+    return *this;
+}
+template <typename T>
+void Vector<T>::push_back(T val)
+{
     int old_capacity = capacity();
     int new_capacity = std::max(old_capacity + 1, old_capacity * 3);
     if (size() == old_capacity) {
         reserve(new_capacity);
         push_back(val);
-    } else {
+    }
+    else {
         (*curr) = val;
         curr++;
     };
 }
 template <typename T>
-void Vector<T>::insert(int pos, T val) {
+void Vector<T>::insert(int pos, T val)
+{
     int old_size = size();
     int old_capacity = capacity();
     if (old_size + 1 > old_capacity) {
@@ -25,14 +56,14 @@ void Vector<T>::insert(int pos, T val) {
         reserve(new_capacity);
     }
     resize(old_size + 1);
-    for (int i = pos + 1; i < size(); i++)
-        first[i] = first[i - 1];
+    for (int i = pos + 1; i < size(); i++) first[i] = first[i - 1];
 
     for (int i = pos; i < pos + 1; i++) first[i] = val;
 }
 
 template <typename T>
-void Vector<T>::reserve(int new_capacity) {
+void Vector<T>::reserve(int new_capacity)
+{
     int old_capacity = capacity();
     int old_size = size();
     if (new_capacity <= old_capacity) return;
@@ -48,14 +79,23 @@ void Vector<T>::reserve(int new_capacity) {
 }
 
 template <typename T>
-void Vector<T>::resize(int new_size) {
+void Vector<T>::resize(int new_size)
+{
     int old_size = size();
     if (new_size > old_size) {
         reserve(new_size);
         T x;
         for (int i = old_size; i < new_size; i++) push_back(x);
-    } else if (new_size < old_size) {
+    }
+    else if (new_size < old_size) {
         for (int i = old_size; i > new_size; i--) pop_back();
     }
 }
-template class Vector<pii>;
+template <typename T>
+void Vector<T>::pop_back()
+{
+    if (size() > 0) {
+        curr--;
+    }
+}
+template class Vector<int>;
