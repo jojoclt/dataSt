@@ -7,37 +7,20 @@
 #include "status.hpp"
 #include "user.hpp"
 #include "vector.hpp"
-static int money = 0;
 class Station {
    public:
     // sID bikeID
     Vector<int> bikeID[3];
     Station() : sID(-1) {}
     Station(int sID, int elec, int lady, int road);
+    ~Station();
     // Station(const Station &s);
     // Station &operator=(const Station &s);
     int getLatestBike(int bt);
-    Status Rent(int bt, int ID, int time);
+    Status Rent(int bt, int ID, int time, int sOut);
     void Return(int uID, int time);
-    void printBike(int bt)
-    {
-        for (int i = 0; i < bikeID[bt].size(); i++) {
-            std::cout << bikeID[bt][i] << " ";
-        }
-        std::cout << "\n";
-    }
-    void printStation_1()
-    {
-        if (sID != -1) {
-            std::cout << sID << ":\n";
-            std::cout << "electric: ";
-            printBike(0);
-            std::cout << "lady: ";
-            printBike(1);
-            std::cout << "road: ";
-            printBike(2);
-        }
-    }
+    void printBike(int bt);
+    void printStation_1();
 
    public:
     int sID;

@@ -1,6 +1,36 @@
 #include "vector.hpp"
 
 #include <iostream>
+
+template <typename T>
+Vector<T>::Vector()
+{
+    first = new T[0];
+    last = curr = first;
+}
+
+template <typename T>
+Vector<T>::~Vector()
+{
+    if (first != nullptr) delete[] first;
+}
+template <typename T>
+Vector<T>::Vector(const Vector<T>& obj)
+{
+    if (first != nullptr) delete[] first;
+    first = curr = last = nullptr;
+    reserve(obj.size());
+    for (int i = 0; i < obj.size(); i++) push_back(obj[i]);
+}
+template <typename T>
+Vector<T>& Vector<T>::operator=(const Vector<T>& obj)
+{
+    if (first != nullptr) delete[] first;
+    first = curr = last = nullptr;
+    reserve(obj.size());
+    for (int i = 0; i < obj.size(); i++) push_back(obj[i]);
+    return *this;
+}
 template <typename T>
 void Vector<T>::push_back(T val)
 {
@@ -59,6 +89,13 @@ void Vector<T>::resize(int new_size)
     }
     else if (new_size < old_size) {
         for (int i = old_size; i > new_size; i--) pop_back();
+    }
+}
+template <typename T>
+void Vector<T>::pop_back()
+{
+    if (size() > 0) {
+        curr--;
     }
 }
 template class Vector<int>;

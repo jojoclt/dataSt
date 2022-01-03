@@ -14,45 +14,26 @@ class Vector {
         os << "\n";
         return os;
     }
-    Vector()
-    {
-        first = new T[0];
-        last = curr = first;
-    }
-    Vector(int s)
-    {
-        first = new T[s];
-        curr = first;
-        last = first + s * sizeof(T);
-    }
-    Vector(const Vector<T>& obj)
-    {
-        first = obj.first;
-        curr = obj.curr;
-        last = obj.last;
-    }
-    ~Vector() {}
-    T& operator[](int pos) { return first[pos]; }
-    Vector<T>& operator=(const Vector<T>& p)
-    {
-        first = p.first;
-        curr = p.curr;
-        last = p.last;
-        return *this;
-    }
+    Vector();
+    ~Vector();
+    // Vector(int s)
+    // {
+    //     first = new T[s];
+    //     curr = first;
+    //     last = first + s * sizeof(T);
+    // }
+    Vector(const Vector<T>&);
+
+    T& operator[](const int pos) const { return first[pos]; }
+    Vector<T>& operator=(const Vector<T>&);
     void push_back(T x);
     void insert(int pos, T val);
     void reserve(int new_capacity);
     // Filling num
     void resize(int new_size);
-    int size() { return curr - first; }
-    int capacity() { return last - first; }
-    void pop_back()
-    {
-        if (size() > 0) {
-            curr--;
-        }
-    }
+    int size() const { return curr - first; }
+    int capacity() const { return last - first; }
+    void pop_back();
 };
 
 #endif

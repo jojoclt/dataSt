@@ -2,17 +2,21 @@
 
 #include <iostream>
 
+#include "user.hpp"
+
+extern User user[100000];
 Station::Station(int sID, int elec, int lady, int road) : sID(sID)
 {
     bikeID[0] = fillBike(sID, elec);
     bikeID[1] = fillBike(sID, lady);
     bikeID[2] = fillBike(sID, road);
 }
-Status Station::Rent(int bt, int ID, int time)
+Station::~Station() {}
+Status Station::Rent(int bt, int ID, int time, int sOut)
 {
     // Check if bike is available
     if (bikeID[bt].size()) {
-        user[ID].Rent(bt, bikeID[bt][0], time);
+        user[ID].Rent(bt, bikeID[bt][0], time, sOut);
         // RemoveBike(bt);
         return Accept;
     }
@@ -22,12 +26,13 @@ void Station::Return(int ID, int time)
 {
     // TODO
     addBike(user[ID].type, user[ID].bikeNo);
-    user[ID].Return();
+    user[ID].Return(time, sID);
     return;
 }
 Vector<int> Station::fillBike(int ID, int x)
 {
-    Vector<int> arr(x);
+    // Vector<int> arr(x);
+    Vector<int> arr;
     for (int i = 0; i < x; i++) {
         arr.push_back(toBike(ID, i));
     }
@@ -59,6 +64,26 @@ void Station::addBike(int type, int bike)
     bikeID[type].insert(l, bike);
 }
 
+void Station::printBike(int bt)
+{
+    if (!bikeID[bt].size()) std::cout << "0";
+    for (int i = 0; i < bikeID[bt].size(); i++) {
+        std::cout << bikeID[bt][i] << " ";
+    }
+    std::cout << "\n";
+}
+void Station::printStation_1()
+{
+    if (sID != -1) {
+        std::cout << sID << ":\n";
+        std::cout << "electric: ";
+        printBike(0);
+        std::cout << "lady: ";
+        printBike(1);
+        std::cout << "road: ";
+        printBike(2);
+    }
+}
 // int main()
 // {
 //     Station* station = new Station(0, 2, 3, 4);
