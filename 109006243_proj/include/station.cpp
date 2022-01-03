@@ -22,7 +22,7 @@ void Station::Return(int ID, int time) {
     return;
 }
 Vector<pii> Station::fillBike(int ID, int x) {
-    Vector<pii> arr(x);
+    Vector<pii> arr(105);
     for (int i = 0; i < x; i++) {
         arr.push_back(pii(ID, i));
     }

@@ -77,6 +77,7 @@ int main() {
             }
         }
     } else {
+        // type1 and2 response
         // station[0] = Station(0, 2, 3, 4);
         // // cout << station[0].bikeCount[2];
         // station[0].addBike(2, pii(3, 22));
