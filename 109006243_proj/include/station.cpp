@@ -11,17 +11,17 @@ Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
     bikeID[2] = fillBike(sID, road);
 }
 Station::~Station() {}
-Status Station::Rent(int bt, int ID, int time, int sOut) {
+Status Station::Rent(int bt, int ID, int time) {
     // Check if bike is available
     if (bikeID[bt].size()) {
-        user[ID].Rent(bt, bikeID[bt][0], time, sOut);
-        // RemoveBike(bt);
+        user[ID].Rent(bt, bikeID[bt][0], time, sID);
+        RemoveBike(bt);
         return Accept;
     }
     return Reject;
 }
 void Station::Return(int ID, int time) {
-    // TODO
+    if (user[ID].type == -1) return;
     addBike(user[ID].type, user[ID].bikeNo);
     user[ID].Return(time, sID);
     return;

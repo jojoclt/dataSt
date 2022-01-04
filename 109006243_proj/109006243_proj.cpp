@@ -4,6 +4,7 @@
 
 #include "./include/pricing.hpp"
 #include "./include/station.hpp"
+#include "./include/status.hpp"
 
 using namespace std;
 
@@ -74,7 +75,11 @@ int main() {
             if (t == "rent") {
                 // stationIdRent bikeType userId(5digit) timeRent
                 input >> ID >> type >> userID >> time;
-                station[ID].Rent(toBike(type), userID, time, ID);
+                Status x = station[ID].Rent(toBike(type), userID, time);
+                if (x == Reject)
+                    cout << "REJECT\n";
+                else
+                    cout << "ACCEPT\n";
             } else if (t == "return") {
                 // stationIdReturn userId timeReturn0-1440
                 input >> ID >> userID >> time;
@@ -94,5 +99,3 @@ int main() {
     for (int i = 0; i <= 100; i++) station[i].printStation_1();
     std::cout << money;
 }
-
-// TODO SOMETIMES SEGMENTATION FAULT !!! IS IT VECTOR ALLOCATION??

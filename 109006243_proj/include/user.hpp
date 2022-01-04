@@ -1,5 +1,7 @@
 #ifndef USER_HPP
 #define USER_HPP
+#include <iostream>
+
 #include "pricing.hpp"
 
 extern int money;
@@ -14,22 +16,20 @@ class User {
 
    public:
     friend class Station;
-    User() : type(-1) {}
-    void Rent(int bt, int no, int time, int stat)
-    {
+    User() : type(-1), timeSt(-1000) {}
+    void Rent(int bt, int no, int time, int stat) {
         type = bt;
         bikeNo = no;
         timeSt = time;
         sOut = stat;
     }
-    void Return(int time2, int sIn)
-    {
-        // std::cout << "X" << bikeRate[type].first;
+    void Return(int time2, int sIn) {
         int dt = time2 - timeSt;
-        if (dt <= map[sOut][sIn])
-            money += bikeRate[type].first;
-        else
-            money += bikeRate[type].second;
+        if (dt <= map[sOut][sIn]) {
+            money += bikeRate[type].first * dt;
+        } else {
+            money += bikeRate[type].second * dt;
+        }
         type = -1;
     }
 };

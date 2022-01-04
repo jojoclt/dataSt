@@ -17,7 +17,7 @@ class Station {
     // Station(const Station &s);
     // Station &operator=(const Station &s);
     int getLatestBike(int bt);
-    Status Rent(int bt, int ID, int time, int sOut);
+    Status Rent(int bt, int ID, int time);
     void Return(int uID, int time);
     void printBike(int bt);
     void printStation_1();
