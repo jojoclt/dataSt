@@ -27,6 +27,7 @@ int toBike(string b) {
 int main() {
     if (!DEBUG) {
         ifstream input;
+        ofstream output;
 
         input.open("./test_case/map.txt");
         if (!input.is_open()) cout << "<<MAP NOT OPENED>>", exit(0);
@@ -67,26 +68,30 @@ int main() {
         input.open("./test_case/user.txt");
         if (!input.is_open()) cout << "<<USER NOT OPENED>>", exit(0);
 
+        output.open("part1_response.txt");
         while (input) {
             string t;
             input >> t;
+            output << t << " ";
             int ID, userID, time;
             string type;
             if (t == "rent") {
                 // stationIdRent bikeType userId(5digit) timeRent
                 input >> ID >> type >> userID >> time;
                 Status x = station[ID].Rent(toBike(type), userID, time);
-                if (x == Reject)
-                    cout << "REJECT\n";
-                else
-                    cout << "ACCEPT\n";
+                output << ID << " " << type << " " << std::setfill('0') << std::setw(5) << userID << " " << time << outputRes(x);
             } else if (t == "return") {
                 // stationIdReturn userId timeReturn0-1440
                 input >> ID >> userID >> time;
+                output << ID << " " << std::setfill('0') << std::setw(5) << userID << " " << time << "\n";
                 station[ID].Return(userID, time);
                 // USER MUST HAVE BIKE VAR
             }
         }
+        output.close();
+        output.open("part1_status.txt");
+        for (int i = 0; i <= 100; i++) station[i].printStation_1(output);
+        output << money;
     } else {
         // type1 and2 response
         // station[0] = Station(0, 2, 3, 4);
@@ -96,6 +101,4 @@ int main() {
         // // cout << "X";
     }
     // station[1] = Station(1, 2, 3, 4);
-    for (int i = 0; i <= 100; i++) station[i].printStation_1();
-    std::cout << money;
 }

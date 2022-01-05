@@ -19,8 +19,8 @@ class Station {
     int getLatestBike(int bt);
     Status Rent(int bt, int ID, int time);
     void Return(int uID, int time);
-    void printBike(int bt);
-    void printStation_1();
+    void printBike(int bt, std::ostream& os);
+    void printStation_1(std::ostream& os);
 
    public:
     int sID;

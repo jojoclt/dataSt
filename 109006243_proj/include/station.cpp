@@ -57,22 +57,21 @@ void Station::addBike(int type, int bike) {
     bikeID[type].insert(l, bike);
 }
 
-void Station::printBike(int bt) {
-    if (!bikeID[bt].size()) std::cout << "0";
+void Station::printBike(int bt, std::ostream& os) {
     for (int i = 0; i < bikeID[bt].size(); i++) {
-        std::cout << bikeID[bt][i] << " ";
+        os << bikeID[bt][i] << " ";
     }
-    std::cout << "\n";
+    os << "\n";
 }
-void Station::printStation_1() {
+void Station::printStation_1(std::ostream& os) {
     if (sID != -1) {
-        std::cout << sID << ":\n";
-        std::cout << "electric: ";
-        printBike(0);
-        std::cout << "lady: ";
-        printBike(1);
-        std::cout << "road: ";
-        printBike(2);
+        os << sID << ":\n";
+        os << "electric: ";
+        printBike(0, os);
+        os << "lady: ";
+        printBike(1, os);
+        os << "road: ";
+        printBike(2, os);
     }
 }
 // int main()

@@ -1,0 +1,10 @@
+rent 3 lady 00002 0
+accept
+rent 2 electric 00001 0
+accept
+return 1 00001 35
+return 1 00002 85
+rent 3 electric 00003 90
+reject
+return 1 00003 1440
+ 
