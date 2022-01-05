@@ -24,12 +24,14 @@ int toBike(string b) {
     if (b == "road") return 2;
     return 0;
 }
+// string path = "./test_case/DS_testcase/open_basic1";
+string path = "./test_case";
 int main() {
     if (!DEBUG) {
         ifstream input;
         ofstream output;
 
-        input.open("./test_case/map.txt");
+        input.open(path + "/map.txt");
         if (!input.is_open()) cout << "<<MAP NOT OPENED>>", exit(0);
 
         initMap();
@@ -41,7 +43,7 @@ int main() {
         calcDist();
         input.close();
 
-        input.open("./test_case/station.txt");
+        input.open(path + "/station.txt");
         if (!input.is_open()) cout << "<<STATION NOT OPENED>>", exit(0);
 
         while (input) {
@@ -51,7 +53,7 @@ int main() {
         }
         input.close();
 
-        input.open("./test_case/fee.txt");
+        input.open(path + "/fee.txt");
         if (!input.is_open()) cout << "<<FEE NOT OPENED>>", exit(0);
 
         while (input) {
@@ -65,7 +67,7 @@ int main() {
         }
         input.close();
 
-        input.open("./test_case/user.txt");
+        input.open(path + "/user.txt");
         if (!input.is_open()) cout << "<<USER NOT OPENED>>", exit(0);
 
         output.open("part1_response.txt");
