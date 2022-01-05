@@ -6,16 +6,15 @@
 
 extern User user[100000];
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
-    bikeID[0] = fillBike(sID, elec);
-    bikeID[1] = fillBike(sID, lady);
-    bikeID[2] = fillBike(sID, road);
+    bikeID[0].heap = fillBike(sID, elec);
+    bikeID[1].heap = fillBike(sID, lady);
+    bikeID[2].heap = fillBike(sID, road);
 }
 Station::~Station() {}
 Status Station::Rent(int bt, int ID, int time) {
     // Check if bike is available
     if (bikeID[bt].size()) {
-        user[ID].Rent(bt, bikeID[bt][0], time, sID);
-        RemoveBike(bt);
+        user[ID].Rent(bt, bikeID[bt].extractMax(), time, sID);
         return Accept;
     }
     return Reject;
@@ -27,41 +26,25 @@ void Station::Return(int ID, int time) {
     return;
 }
 Vector<int> Station::fillBike(int ID, int x) {
-    // Vector<int> arr(x);
-    Vector<int> arr;
-    for (int i = 0; i < x; i++) {
+    Vector<int> arr(100);
+    for (int i = x - 1; i >= 0; i--) {
+        // already heap in bottom up fashion
         arr.push_back(toBike(ID, i));
     }
 
     return arr;
 }
 
-void Station::RemoveBike(int bt) {
-    for (int i = 0; i < bikeID[bt].size() - 1; i++) {
-        bikeID[bt][i] = bikeID[bt][i + 1];
-    }
-    bikeID[bt].pop_back();
-}
 void Station::addBike(int type, int bike) {
-    int l = 0, r = bikeID[type].size() - 1;
-    while (l <= r) {
-        int mid = (l + r) >> 1;
-        // std::cout << bikeID[type][mid].first << " " <<
-        // bikeID[type][mid].second << std::endl;
-        if (bike < bikeID[type][mid]) {
-            r = mid - 1;
-        } else
-            l = mid + 1;
-    }
-    // std::cout << l << "y";
-    bikeID[type].insert(l, bike);
+    bikeID[type].insert(bike);
 }
 
 void Station::printBike(int bt, std::ostream& os) {
-    for (int i = 0; i < bikeID[bt].size(); i++) {
-        os << bikeID[bt][i] << " ";
-    }
+    Vector<int> a(50);
+    while (bikeID[bt].size()) a.push_back(bikeID[bt].extractMax());
+    for (int i = a.size() - 1; i >= 0; i--) os << a[i] << " ";
     os << "\n";
+    // TODO: HELP REVERSE
 }
 void Station::printStation_1(std::ostream& os) {
     if (sID != -1) {

@@ -13,6 +13,12 @@ Vector<T>::~Vector() {
     if (first != nullptr) delete[] first;
 }
 template <typename T>
+Vector<T>::Vector(int s) {
+    first = new T[0];
+    last = curr = first;
+    reserve(s);
+}
+template <typename T>
 Vector<T>::Vector(const Vector<T>& obj) {
     if (first != nullptr) delete[] first;
     first = curr = last = nullptr;

@@ -4,13 +4,14 @@
 #include <iomanip>
 #include <iostream>
 
+#include "maxheap.hpp"
 #include "status.hpp"
 #include "user.hpp"
 #include "vector.hpp"
 class Station {
    public:
     // sID bikeID
-    Vector<int> bikeID[3];
+    MaxHeap bikeID[3];
     Station() : sID(-1) {}
     Station(int sID, int elec, int lady, int road);
     ~Station();
@@ -26,7 +27,6 @@ class Station {
     int sID;
     int toBike(int sID, int x) { return sID * 100 + x; }
     Vector<int> fillBike(int sID, int x);
-    void RemoveBike(int bt);
     void addBike(int bt, int bike);
 };
 #endif

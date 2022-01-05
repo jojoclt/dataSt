@@ -8,20 +8,15 @@ class Vector {
     T *first, *curr, *last;
 
    public:
-    friend std::ostream& operator<<(std::ostream& os, Vector<T>& v)
-    {
+    friend std::ostream& operator<<(std::ostream& os, Vector<T>& v) {
         for (int i = 0; i < v.size(); i++) os << v[i] << " ";
         os << "\n";
         return os;
     }
     Vector();
     ~Vector();
-    // Vector(int s)
-    // {
-    //     first = new T[s];
-    //     curr = first;
-    //     last = first + s * sizeof(T);
-    // }
+    Vector(int s);
+
     Vector(const Vector<T>&);
 
     T& operator[](const int pos) const { return first[pos]; }
