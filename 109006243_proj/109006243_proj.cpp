@@ -94,6 +94,7 @@ int main() {
         output.open("part1_status.txt");
         for (int i = 0; i <= 100; i++) station[i].printStation_1(output);
         output << money;
+        output.close();
     } else {
         // type1 and2 response
         // station[0] = Station(0, 2, 3, 4);
@@ -102,5 +103,4 @@ int main() {
         // station[0].printBike(2);
         // // cout << "X";
     }
-    // station[1] = Station(1, 2, 3, 4);
 }

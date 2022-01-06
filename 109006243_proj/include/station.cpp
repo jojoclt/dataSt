@@ -44,7 +44,6 @@ void Station::printBike(int bt, std::ostream& os) {
     while (bikeID[bt].size()) a.push_back(bikeID[bt].extractMax());
     for (int i = a.size() - 1; i >= 0; i--) os << a[i] << " ";
     os << "\n";
-    // TODO: HELP REVERSE
 }
 void Station::printStation_1(std::ostream& os) {
     if (sID != -1) {
