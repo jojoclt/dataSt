@@ -12,10 +12,10 @@ Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
     bikeID[2].heap = fillBike(sID, road);
 }
 Station::~Station() {}
-Status Station::Rent(int bt, int ID, int time, int disc, int wait) {
+Status Station::Rent(int bt, int ID, int timeIn, int disc, int wait) {
     // Check if bike is available
-    if (bikeID[bt].size()) {
-        user[ID].Rent(bt, bikeID[bt].top(), time, sID, disc, wait);
+    if (!bikeID[bt].empty()) {
+        user[ID].Rent(bt, bikeID[bt].top(), timeIn, sID, disc, wait);
         bikeID[bt].pop();
         return Accept;
     }

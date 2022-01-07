@@ -19,8 +19,8 @@ g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 int tempStock[MAXN][3];
 Station station[MAXN];
 
-// string path = "./test_case/DS_testcase/open_basic1";
-string path = "./test_case";
+string path = "./test_case/DS_testcase/open_basic3";
+// string path = "./test_case";
 int main() {
     if (!DEBUG) {
         money = 0;
