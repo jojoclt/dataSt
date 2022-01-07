@@ -4,7 +4,6 @@
 #include <string.h>
 
 #include "pii.hpp"
-
 // elec lady road - disc/reg price
 
 void initMap();

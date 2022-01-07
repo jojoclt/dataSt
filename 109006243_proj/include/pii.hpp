@@ -15,7 +15,9 @@ struct pii {
     bool operator>(pii p) const {
         return (first > p.first) || (first == p.first && second > p.second);
     }
-    bool operator==(const pii& p) { return p.first == first && p.second == second; }
+    bool operator==(const pii& p) {
+        return p.first == first && p.second == second;
+    }
 };
 
 #endif
