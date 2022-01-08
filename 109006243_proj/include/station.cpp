@@ -5,11 +5,10 @@
 #include "user.hpp"
 
 extern User user[100000];
-
+Station* station;
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
     maxTransfer[0] = elec, maxTransfer[1] = lady, maxTransfer[2] = road;
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 2; j++) costExpected[i][j] = 0;
+    for (int i = 0; i < 3; i++) costExpected[i] = 0;
     size[0] = elec, size[1] = lady, size[2] = road;
     bikeID[0].heap = fillBike(sID, elec);
     bikeID[1].heap = fillBike(sID, lady);
@@ -68,10 +67,3 @@ void Station::printStation_1(std::ostream& os) {
         printBike(2, os);
     }
 }
-// int main() {
-//     Station* station = new Station(0, 2, 3, 4);
-//     while (!station->bikeID[2].empty()) {
-//         std::cout << station->bikeID[2].top() << "\n";
-//         station->bikeID[2].pop();
-//     }
-// }

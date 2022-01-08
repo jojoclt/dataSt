@@ -16,11 +16,13 @@ int DEBUG2 = 1;
 int DEBUG3 = 1;
 int maxStation = 0;
 extern User user[100000];
+extern Vector<pii> transferList[2];
+bool rejectResponse[100000];
 /*
 g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 ./109006243_proj
 */
-Station *station;
+extern Station *station;
 Vector<int> Rej;
 
 void stockAtTime();
@@ -30,8 +32,8 @@ void MaxTransDisc();
 void mapPrint();
 void waitListPrint();
 void expectCost();
-string path = "./test_case/DS_testcase/open_basic3";
-// string path = "./test_case";
+// string path = "./test_case/DS_testcase/open_basic3";
+string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
@@ -77,9 +79,7 @@ int main() {
         User t = user[Rej[i]];
         station[t.sOut].waitList[t.type].push(
             pii(-(t.timeEnd - t.timeSt), Rej[i]));
-        station[t.sOut].costExpected[t.type][0] += t.Return(t.timeEnd, t.sIn);
-        station[t.sOut].costExpected[t.type][1] +=
-            round(costForDisc * (t.timeEnd - t.timeSt));
+        station[t.sOut].costExpected[t.type] += t.Return(t.timeEnd, t.sIn);
     }
     if (DEBUG) {
         expectCost();
@@ -103,7 +103,18 @@ int main() {
         ofstream output;
 
         inputStation(input, path);
-
+        // maxTransferOp();
+        // from to type need
+        // for (int i = 0; i < transferList[0].size(); i++) {
+        //     int from = transferList[0][i].first, to =
+        //     transferList[0][i].second; int type = transferList[1][i].first;
+        //     int &need = transferList[1][i].second;
+        //     while (need) {
+        //         station[to].bikeID[type].push(station[from].bikeID[type].top());
+        //         station[from].bikeID[type].pop();
+        //         need--;
+        //     }
+        // }
         input.open(path + "/user.txt");
         output.open("part2_response.txt");
         while (input) {
@@ -116,7 +127,7 @@ int main() {
                 // stationIdRent bikeType userId(5digit) timeRent
                 input >> ID >> type >> userID >> time;
                 Status x = station[ID].Rent(toBike(type), userID, time);
-                if (x != Reject) {
+                if (x == Accept) {
                     output << ID << " " << type << " " << std::setfill('0')
                            << std::setw(5) << userID << " " << time
                            << outputRes(x);
@@ -184,7 +195,7 @@ void outputUserTest() {
 void MaxTransDisc() {
     ofstream out;
     out.open("maxTrans.txt");
-    for (int i = 0; i < maxStation; i++) {
+    for (int i = 0; i <= maxStation; i++) {
         if (station[i].sID != -1) {
             out << i << " ";
             for (int j = 0; j < 3; j++) out << station[i].maxTransfer[j] << " ";
@@ -239,8 +250,7 @@ void expectCost() {
     for (int i = 1; i <= maxStation; i++) {
         out << i << ":\n";
         for (int j = 0; j < 3; j++) {
-            out << "TRANSFER:" << station[i].costExpected[j][0]
-                << " DISCOUNT:" << station[i].costExpected[j][1] << "\n";
+            out << "TRANSFER:" << station[i].costExpected[j] << "\n";
         }
         out << "\n";
     }

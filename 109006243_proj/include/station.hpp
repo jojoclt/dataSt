@@ -5,13 +5,14 @@
 #include <iostream>
 
 #include "minheap.hpp"
+#include "pii.hpp"
 #include "status.hpp"
 #include "user.hpp"
 #include "vector.hpp"
 
 class Station {
    public:
-    int costExpected[3][2];  // transfer for Type and discount
+    int costExpected[3];  // transfer for Type
     int size[3];
     int maxTransfer[3];
     MinHeap<pii> waitList[3];  // Plz reverse the minus for MAXHEAP
