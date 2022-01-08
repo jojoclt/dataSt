@@ -6,13 +6,14 @@
 #include "vector.hpp"
 using namespace std;
 
+template <typename T>
 class MinHeap {
    public:
-    Vector<int> heap;
+    Vector<T> heap;
     MinHeap(int capacity = 100);
-    void push(int k);
+    void push(T k);
     void pop();
-    int top();
+    T top();
     int size() const;
     int capacity() const;
     bool empty();

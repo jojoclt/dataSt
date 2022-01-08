@@ -1,17 +1,38 @@
 #include "minheap.hpp"
-
-int MinHeap::Parent(int i) { return (i - 1) / 1; }
-int MinHeap::Left(int i) { return 2 * i + 1; }
-int MinHeap::Right(int i) { return 2 * i + 2; }
-int MinHeap::top() { return heap[0]; }
-bool MinHeap::empty() { return size() == 0; }
-
-int MinHeap::size() const { return heap.size(); }
-int MinHeap::capacity() const { return heap.capacity(); }
-
-MinHeap::MinHeap(int cap) { heap.reserve(cap); }
-
-void MinHeap::heapify_down(int i) {
+template <typename T>
+int MinHeap<T>::Parent(int i) {
+    return (i - 1) / 1;
+}
+template <typename T>
+int MinHeap<T>::Left(int i) {
+    return 2 * i + 1;
+}
+template <typename T>
+int MinHeap<T>::Right(int i) {
+    return 2 * i + 2;
+}
+template <typename T>
+T MinHeap<T>::top() {
+    return heap[0];
+}
+template <typename T>
+bool MinHeap<T>::empty() {
+    return size() == 0;
+}
+template <typename T>
+int MinHeap<T>::size() const {
+    return heap.size();
+}
+template <typename T>
+int MinHeap<T>::capacity() const {
+    return heap.capacity();
+}
+template <typename T>
+MinHeap<T>::MinHeap(int cap) {
+    heap.reserve(cap);
+}
+template <typename T>
+void MinHeap<T>::heapify_down(int i) {
     int left = Left(i);
     int right = Right(i);
 
@@ -25,21 +46,24 @@ void MinHeap::heapify_down(int i) {
         heapify_down(smallest);
     }
 }
-
-void MinHeap::heapify_up(int i) {
+template <typename T>
+void MinHeap<T>::heapify_up(int i) {
     if (i && heap[Parent(i)] > heap[i]) {
         swap(heap[i], heap[Parent(i)]);
         heapify_up(Parent(i));
     }
 }
-
-void MinHeap::push(int k) {
+template <typename T>
+void MinHeap<T>::push(T k) {
     heap.push_back(k);
     int index = size() - 1;
     heapify_up(index);
 }
-void MinHeap::pop() {
+template <typename T>
+void MinHeap<T>::pop() {
     heap[0] = heap[size() - 1];
     heap.pop_back();
     heapify_down(0);
 }
+template class MinHeap<pii>;
+template class MinHeap<int>;

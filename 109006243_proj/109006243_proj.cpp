@@ -75,9 +75,9 @@ int main() {
     // PUSH BACK THE USER DATA TO WAITLIST
     for (int i = 0; i < Rej.size(); i++) {
         User t = user[Rej[i]];
-        station[t.sOut].waitList[t.type].push_back(
+        station[t.sOut].waitList[t.type].push(
             pii(t.timeEnd - t.timeSt, Rej[i]));
-        station[t.sOut].costExpected[t.type] += t.Return(t.timeEnd, t.sIn);
+        station[t.sOut].costExpected[t.type] += t.Return(-t.timeEnd, t.sIn);
     }
     if (DEBUG) {
         expectCost();
@@ -217,15 +217,15 @@ void waitListPrint() {
     for (int i = 1; i <= maxStation; i++) {
         out << i << ":\n";
         for (int j = 0; j < 3; j++) {
-            if (station[i].waitList[j].size()) out << "Type " << j << ": ";
+            MinHeap<pii> t = station[i].waitList[j];
+            if (t.size()) out << "Type " << j << ": ";
             int k;
-            if (station[i].waitList[j].size())
-                out << "(" << station[i].waitList[j].size() << ")";
-            for (k = 0; k < station[i].waitList[j].size(); k++) {
-                out << station[i].waitList[j][k].first << ","
-                    << station[i].waitList[j][k].second << " ";
+            if (t.size()) out << "(" << t.size() << ")";
+            while (!t.empty()) {
+                out << -t.top().first << "," << t.top().second << " ";
+                t.pop();
             }
-            if (k) out << "\n";
+            if (t.size()) out << "\n";
         }
     }
     out.close();

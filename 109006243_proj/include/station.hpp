@@ -14,8 +14,8 @@ class Station {
     int costExpected[3];  // transfer for Type
     int size[3];
     int maxTransfer[3];
-    Vector<pii> waitList[3];
-    MinHeap bikeID[3];
+    MinHeap<pii> waitList[3];  // Plz reverse the minus for MAXHEAP
+    MinHeap<int> bikeID[3];
     Station() : sID(-1) {}
     Station(int sID, int elec, int lady, int road);
     ~Station();
