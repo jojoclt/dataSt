@@ -8,7 +8,8 @@ extern User user[100000];
 
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
     maxTransfer[0] = elec, maxTransfer[1] = lady, maxTransfer[2] = road;
-    costExpected[0] = costExpected[1] = costExpected[2] = 0;
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 2; j++) costExpected[i][j] = 0;
     size[0] = elec, size[1] = lady, size[2] = road;
     bikeID[0].heap = fillBike(sID, elec);
     bikeID[1].heap = fillBike(sID, lady);

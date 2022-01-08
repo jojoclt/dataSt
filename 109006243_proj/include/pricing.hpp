@@ -6,7 +6,8 @@
 #include "pii.hpp"
 // elec lady road - disc/reg price
 extern int maxStation;
-void initMap();
+extern int costForDisc;
+void initMap(int c);
 void calcDist();
 pii getShortestTransfer(int from, int type);
 #endif

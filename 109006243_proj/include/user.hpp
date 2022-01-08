@@ -4,9 +4,8 @@
 #include <iostream>
 
 #include "pricing.hpp"
-#define MAXN 505
 extern int money;
-extern int map[MAXN][MAXN];
+extern int **map;
 extern pii bikeRate[3];
 class User {
    public:

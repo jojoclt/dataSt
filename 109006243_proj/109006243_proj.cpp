@@ -8,9 +8,9 @@
 #include "./include/status.hpp"
 #include "./include/user.hpp"
 
-#define MAXN 505
 using namespace std;
 
+int costForDisc = 123456;
 int DEBUG = 1;
 int DEBUG2 = 1;
 int DEBUG3 = 1;
@@ -20,7 +20,7 @@ extern User user[100000];
 g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 ./109006243_proj
 */
-Station station[MAXN];
+Station *station;
 Vector<int> Rej;
 
 void stockAtTime();
@@ -76,13 +76,15 @@ int main() {
     for (int i = 0; i < Rej.size(); i++) {
         User t = user[Rej[i]];
         station[t.sOut].waitList[t.type].push(
-            pii(t.timeEnd - t.timeSt, Rej[i]));
-        station[t.sOut].costExpected[t.type] += t.Return(-t.timeEnd, t.sIn);
+            pii(-(t.timeEnd - t.timeSt), Rej[i]));
+        station[t.sOut].costExpected[t.type][0] += t.Return(t.timeEnd, t.sIn);
+        station[t.sOut].costExpected[t.type][1] +=
+            round(costForDisc * (t.timeEnd - t.timeSt));
     }
     if (DEBUG) {
         expectCost();
         waitListPrint();
-        RejectOut();
+        // RejectOut();
         // stockAtTime();
         MaxTransDisc();
         mapPrint();
@@ -91,7 +93,7 @@ int main() {
     output.close();
 
     output.open("part1_status.txt");
-    for (int i = 0; i < MAXN; i++) station[i].printStation_1(output);
+    for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);
     output << money;
     output.close();
     // for part 2
@@ -134,7 +136,7 @@ int main() {
         }
         output.close();
         output.open("part2_status.txt");
-        for (int i = 0; i < MAXN; i++) station[i].printStation_1(output);
+        for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);
         output << money;
         output.close();
     }
@@ -143,7 +145,7 @@ void stockAtTime() {
     int t[3];
     ofstream out;
     out.open("stockTime.txt");
-    for (int i = 0; i < MAXN; i++) {
+    for (int i = 0; i <= maxStation; i++) {
         if (station[i].sID != -1) {
             for (int j = 0; j < 3; j++) {
                 for (int k = 1; k <= 1441; k++) {
@@ -182,7 +184,7 @@ void outputUserTest() {
 void MaxTransDisc() {
     ofstream out;
     out.open("maxTrans.txt");
-    for (int i = 0; i < MAXN; i++) {
+    for (int i = 0; i < maxStation; i++) {
         if (station[i].sID != -1) {
             out << i << " ";
             for (int j = 0; j < 3; j++) out << station[i].maxTransfer[j] << " ";
@@ -217,15 +219,16 @@ void waitListPrint() {
     for (int i = 1; i <= maxStation; i++) {
         out << i << ":\n";
         for (int j = 0; j < 3; j++) {
-            MinHeap<pii> t = station[i].waitList[j];
-            if (t.size()) out << "Type " << j << ": ";
+            bool x = station[i].waitList[j].size();
+            if (x) out << "Type " << j << ": ";
             int k;
-            if (t.size()) out << "(" << t.size() << ")";
-            while (!t.empty()) {
-                out << -t.top().first << "," << t.top().second << " ";
-                t.pop();
+            if (x) out << "(" << station[i].waitList[j].size() << ")";
+            while (!station[i].waitList[j].empty()) {
+                out << -station[i].waitList[j].top().first << ","
+                    << station[i].waitList[j].top().second << " ";
+                station[i].waitList[j].pop();
             }
-            if (t.size()) out << "\n";
+            if (x) out << "\n";
         }
     }
     out.close();
@@ -234,8 +237,11 @@ void expectCost() {
     ofstream out;
     out.open("costExpect.txt");
     for (int i = 1; i <= maxStation; i++) {
-        out << i << ": ";
-        for (int j = 0; j < 3; j++) out << station[i].costExpected[j] << " ";
+        out << i << ":\n";
+        for (int j = 0; j < 3; j++) {
+            out << "TRANSFER:" << station[i].costExpected[j][0]
+                << " DISCOUNT:" << station[i].costExpected[j][1] << "\n";
+        }
         out << "\n";
     }
     out.close();
