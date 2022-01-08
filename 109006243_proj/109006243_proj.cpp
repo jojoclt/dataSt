@@ -31,8 +31,8 @@ void MaxTransDisc();
 void mapPrint();
 void waitListPrint();
 void expectCost();
-string path = "./test_case/DS_testcase/open_basic3";
-// string path = "./test_case";
+// string path = "./test_case/DS_testcase/open_basic3";
+string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;

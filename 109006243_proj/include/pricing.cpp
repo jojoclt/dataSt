@@ -38,6 +38,7 @@ void maxTransferOp() {
             if (t.first * rateofTransfer < station[c].costExpected[bt]) {
                 // sth about min(need, t.second)
                 Transfer(t.second, c, bt, need);
+                money -= t.first * rateofTransfer;
                 station[t.second].maxTransfer[bt] -= need;
                 // add transfer list type
                 // moveon
