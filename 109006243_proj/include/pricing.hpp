@@ -9,5 +9,8 @@ extern int maxStation;
 extern int costForDisc;
 void initMap(int c);
 void calcDist();
-pii getShortestTransfer(int from, int type);
+void maxTransferOp();
+int getTransferMaxStation(int bt);
+pii getShortestTransfer(int from, int type, int minTran);
+void Transfer(int from, int to, int type, int amo);
 #endif

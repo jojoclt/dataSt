@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "minheap.hpp"
+#include "pricing.hpp"
 #include "status.hpp"
 #include "user.hpp"
 #include "vector.hpp"

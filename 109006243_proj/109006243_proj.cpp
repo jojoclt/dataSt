@@ -12,10 +12,11 @@ using namespace std;
 
 int costForDisc = 123456;
 int DEBUG = 1;
-int DEBUG2 = 1;
+int DEBUG2 = 0;
 int DEBUG3 = 1;
 int maxStation = 0;
 extern User user[100000];
+extern Vector<pii> transferList[2];
 /*
 g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 ./109006243_proj
@@ -59,7 +60,7 @@ int main() {
             if (DEBUG && x == Accept)
                 station[ID].stockAtTime[time][toBike(type)]--;
             if (x == Reject) {
-                if (DEBUG) Rej.push_back(userID);
+                Rej.push_back(userID);
             }
 
         } else if (t == "return") {
@@ -83,7 +84,7 @@ int main() {
     }
     if (DEBUG) {
         expectCost();
-        waitListPrint();
+        // waitListPrint();
         // RejectOut();
         // stockAtTime();
         MaxTransDisc();
@@ -102,6 +103,16 @@ int main() {
         ifstream input;
         ofstream output;
 
+        maxTransferOp();
+
+        for (int i = 0; i < transferList[0].size(); i++) {
+            int from = transferList[0][i].first, to = transferList[0][i].second;
+            int type = transferList[1][i].first;
+            int &need = transferList[1][i].second;
+            cout << from << " " << to << " " << type << " " << need << "\n ";
+        }
+
+        return 0;
         inputStation(input, path);
 
         input.open(path + "/user.txt");
