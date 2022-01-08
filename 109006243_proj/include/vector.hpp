@@ -2,6 +2,8 @@
 #define VECTOR_HPP
 #include <iostream>
 
+#include "user.hpp"
+
 template <typename T>
 class Vector {
    private:

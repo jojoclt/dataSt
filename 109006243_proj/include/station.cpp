@@ -7,6 +7,8 @@
 extern User user[100000];
 
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
+    maxTransfer[0] = elec, maxTransfer[1] = lady, maxTransfer[2] = road;
+    costExpected[0] = costExpected[1] = costExpected[2] = 0;
     size[0] = elec, size[1] = lady, size[2] = road;
     bikeID[0].heap = fillBike(sID, elec);
     bikeID[1].heap = fillBike(sID, lady);
@@ -18,6 +20,7 @@ Status Station::Rent(int bt, int ID, int timeIn, int disc, int wait) {
     if (!bikeID[bt].empty()) {
         user[ID].Rent(bt, bikeID[bt].top(), timeIn, sID, disc, wait);
         bikeID[bt].pop();
+        maxTransfer[bt] = std::min(maxTransfer[bt], bikeID[bt].size());
         return Accept;
     } else
         user[ID].type = bt, user[ID].sOut = sID, user[ID].timeSt = timeIn;
@@ -29,7 +32,9 @@ bool Station::Return(int ID, int time) {
         return false;
     }
     addBike(user[ID].type, user[ID].bikeNo);
-    user[ID].Return(time, sID);
+    money += user[ID].Return(time, sID);
+    maxTransfer[user[ID].type] =
+        std::min(maxTransfer[user[ID].type], bikeID[user[ID].type].size());
     return true;
 }
 Vector<int> Station::fillBike(int ID, int x) {

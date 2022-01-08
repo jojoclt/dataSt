@@ -1,11 +1,5 @@
 #include "minheap.hpp"
 
-void swap(int *x, int *y) {
-    int temp = *x;
-    *x = *y;
-    *y = temp;
-}
-
 int MinHeap::Parent(int i) { return (i - 1) / 1; }
 int MinHeap::Left(int i) { return 2 * i + 1; }
 int MinHeap::Right(int i) { return 2 * i + 2; }
@@ -27,14 +21,14 @@ void MinHeap::heapify_down(int i) {
     if (right < size() && heap[right] < heap[smallest]) smallest = right;
 
     if (smallest != i) {
-        swap(&heap[i], &heap[smallest]);
+        swap(heap[i], heap[smallest]);
         heapify_down(smallest);
     }
 }
 
 void MinHeap::heapify_up(int i) {
     if (i && heap[Parent(i)] > heap[i]) {
-        swap(&heap[i], &heap[Parent(i)]);
+        swap(heap[i], heap[Parent(i)]);
         heapify_up(Parent(i));
     }
 }

@@ -11,6 +11,7 @@ extern int map[MAXN][MAXN];
 extern int waitFee, reduceRate, rateofTransfer;
 extern pii bikeRate[3];
 extern Station station[MAXN];
+extern int maxStation;
 
 int toBike(std::string b) {
     if (b == "electric") return 0;
@@ -44,6 +45,7 @@ void inputStation(std::ifstream &os, std::string path) {
         int ID, elecAmt, ladyAmt, roadAmt;
         os >> ID >> elecAmt >> ladyAmt >> roadAmt;
         station[ID] = Station(ID, elecAmt, ladyAmt, roadAmt);
+        maxStation = max(ID, maxStation);
     }
     os.close();
 }

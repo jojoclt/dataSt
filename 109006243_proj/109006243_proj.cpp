@@ -14,14 +14,22 @@ using namespace std;
 int DEBUG = 1;
 int DEBUG2 = 1;
 int DEBUG3 = 1;
+int maxStation = 0;
 extern User user[100000];
 /*
 g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 ./109006243_proj
 */
 Station station[MAXN];
+Vector<int> Rej;
+
 void stockAtTime();
 void outputUserTest();
+void RejectOut();
+void MaxTransDisc();
+void mapPrint();
+void waitListPrint();
+void expectCost();
 string path = "./test_case/DS_testcase/open_basic3";
 // string path = "./test_case";
 int main() {
@@ -29,12 +37,13 @@ int main() {
     ifstream input;
     ofstream output;
 
-    inputMap(input, path);
     inputStation(input, path);
+    inputMap(input, path);
     inputFee(input, path);
 
     input.open(path + "/user.txt");
     output.open("part1_response.txt");
+
     while (input) {
         string t;
         input >> t;
@@ -47,25 +56,44 @@ int main() {
             Status x = station[ID].Rent(toBike(type), userID, time);
             output << ID << " " << type << " " << std::setfill('0')
                    << std::setw(5) << userID << " " << time << outputRes(x);
-            if (x == Accept) station[ID].stockAtTime[time][toBike(type)]--;
+            if (DEBUG && x == Accept)
+                station[ID].stockAtTime[time][toBike(type)]--;
+            if (x == Reject) {
+                if (DEBUG) Rej.push_back(userID);
+            }
+
         } else if (t == "return") {
             // stationIdReturn userId timeReturn0-1440
             input >> ID >> userID >> time;
             output << ID << " " << std::setfill('0') << std::setw(5) << userID
                    << " " << time << "\n";
             bool x = station[ID].Return(userID, time);
-            if (x == true) station[ID].stockAtTime[time][user[userID].type]++;
+            if (DEBUG && x == true)
+                station[ID].stockAtTime[time][user[userID].type]++;
         }
     }
+    // PUSH BACK THE USER DATA TO WAITLIST
+    for (int i = 0; i < Rej.size(); i++) {
+        User t = user[Rej[i]];
+        station[t.sOut].waitList[t.type].push_back(
+            pii(t.timeEnd - t.timeSt, Rej[i]));
+        station[t.sOut].costExpected[t.type] += t.Return(t.timeEnd, t.sIn);
+    }
+    if (DEBUG) {
+        expectCost();
+        waitListPrint();
+        RejectOut();
+        // stockAtTime();
+        MaxTransDisc();
+        mapPrint();
+        // outputUserTest();
+    }
     output.close();
-
-    if (DEBUG) stockAtTime();
 
     output.open("part1_status.txt");
     for (int i = 0; i < MAXN; i++) station[i].printStation_1(output);
     output << money;
     output.close();
-
     // for part 2
     if (!DEBUG2) {
         money = 0;
@@ -92,9 +120,9 @@ int main() {
                            << outputRes(x);
                 } else {
                     // 1. discount
-                    // TODO actually to know what to offer need to know the
-                    // start and the end transfer or discount wait is hard offer
-                    // discount on ppl accept is hard
+                    // TODO actually to know what to offer need to know
+                    // the start and the end transfer or discount wait
+                    // is hard offer discount on ppl accept is hard
                 }
             } else if (t == "return") {
                 // stationIdReturn userId timeReturn0-1440
@@ -110,7 +138,6 @@ int main() {
         output << money;
         output.close();
     }
-    if (DEBUG) outputUserTest();
 }
 void stockAtTime() {
     int t[3];
@@ -140,7 +167,6 @@ void stockAtTime() {
         }
     }
 }
-
 void outputUserTest() {
     ofstream out;
     out.open("TEST.txt");
@@ -150,6 +176,67 @@ void outputUserTest() {
                 << " Time: " << user[i].timeSt << "-" << user[i].timeEnd
                 << " sOut-sIn: " << user[i].sOut << "->" << user[i].sIn << "\n";
         }
+    }
+    out.close();
+}
+void MaxTransDisc() {
+    ofstream out;
+    out.open("maxTrans.txt");
+    for (int i = 0; i < MAXN; i++) {
+        if (station[i].sID != -1) {
+            out << i << " ";
+            for (int j = 0; j < 3; j++) out << station[i].maxTransfer[j] << " ";
+            out << "\n";
+        }
+    }
+    out.close();
+}
+void RejectOut() {
+    ofstream outw;
+    outw.open("Rejected.txt");
+    for (int i = 0; i < Rej.size(); i++) {
+        User t = user[Rej[i]];
+        outw << "FROM: " << t.sOut << "->" << t.sIn << " TIME: " << t.timeSt
+             << "->" << t.timeEnd << " DIFF: " << t.timeEnd - t.timeSt << " "
+             << toName(t.type) << " ID: " << Rej[i] << "\n";
+    }
+    outw.close();
+}
+void mapPrint() {
+    ofstream out;
+    out.open("mapPrint.txt");
+    for (int i = 1; i <= maxStation; i++) {
+        for (int j = 1; j <= maxStation; j++) out << map[i][j] << " ";
+        out << "\n";
+    }
+    out.close();
+}
+void waitListPrint() {
+    ofstream out;
+    out.open("waitPrint.txt");
+    for (int i = 1; i <= maxStation; i++) {
+        out << i << ":\n";
+        for (int j = 0; j < 3; j++) {
+            if (station[i].waitList[j].size()) out << "Type " << j << ": ";
+            int k;
+            if (station[i].waitList[j].size())
+                out << "(" << station[i].waitList[j].size() << ")";
+            for (k = 0; k < station[i].waitList[j].size(); k++) {
+                out << station[i].waitList[j][k].first << ","
+                    << station[i].waitList[j][k].second << " ";
+            }
+            if (k) out << "\n";
+        }
+    }
+    out.close();
+}
+void expectCost() {
+    ofstream out;
+    out.open("costExpect.txt");
+    for (int i = 1; i <= maxStation; i++) {
+        out << i << ": ";
+        for (int j = 0; j < 3; j++) out << station[i].costExpected[j] << " ";
+        out << "\n";
     }
     out.close();
 }

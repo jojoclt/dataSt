@@ -51,8 +51,7 @@ void Vector<T>::insert(int pos, T val) {
     int old_capacity = capacity();
     if (pos > old_size) return;
     if (curr == last) {
-        int new_capacity =
-            std::max(old_capacity * 3, old_capacity + 1);
+        int new_capacity = std::max(old_capacity * 3, old_capacity + 1);
         reserve(new_capacity);
     }
     curr++;
@@ -96,3 +95,5 @@ void Vector<T>::pop_back() {
     }
 }
 template class Vector<int>;
+template class Vector<pii>;
+template class Vector<User>;

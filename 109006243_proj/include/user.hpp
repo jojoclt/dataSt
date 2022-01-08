@@ -1,5 +1,6 @@
 #ifndef USER_HPP
 #define USER_HPP
+#include <cmath>
 #include <iostream>
 
 #include "pricing.hpp"
@@ -20,10 +21,10 @@ class User {
    public:
     friend class Station;
     User() : isRent(false), discount(1), waitTime(0), type(-1) {}
-
+    void operator=(const User &u);
     void Rent(int bt, int no, int time, int stat, int disc = 1, int wait = 0);
 
-    void Return(int time2, int _sIn);
+    int Return(int time2, int _sIn);
 };
 
 #endif
