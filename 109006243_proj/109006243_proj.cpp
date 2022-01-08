@@ -23,6 +23,7 @@ g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 */
 Station *station;
 Vector<int> Rej;
+bool rejectedUser[100000];
 
 void stockAtTime();
 void outputUserTest();
@@ -31,8 +32,8 @@ void MaxTransDisc();
 void mapPrint();
 void waitListPrint();
 void expectCost();
-// string path = "./test_case/DS_testcase/open_basic3";
-string path = "./test_case";
+string path = "./test_case/DS_testcase/open_basic3";
+// string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
@@ -61,6 +62,7 @@ int main() {
                 station[ID].stockAtTime[time][toBike(type)]--;
             if (x == Reject) {
                 Rej.push_back(userID);
+                rejectedUser[userID] = true;
             }
 
         } else if (t == "return") {
@@ -89,7 +91,7 @@ int main() {
         // stockAtTime();
         MaxTransDisc();
         mapPrint();
-        outputUserTest();
+        // outputUserTest();
     }
     output.close();
 
@@ -111,6 +113,7 @@ int main() {
             int from = transferList[0][i].first, to = transferList[0][i].second;
             int bt = transferList[1][i].first;
             int &need = transferList[1][i].second;
+            station[to].transferedTime = map[from][to];
             output << "transfer " << from << " " << to << " " << toName(bt)
                    << " " << need << " 0\n";
             // cout << from << " " << to << " " << type << " " << need << "\n ";
@@ -131,16 +134,17 @@ int main() {
                 // stationIdRent bikeType userId(5digit) timeRent
                 input >> ID >> type >> userID >> time;
                 Status x = station[ID].Rent(toBike(type), userID, time);
-                if (x != Reject) {
-                    output << ID << " " << type << " " << std::setfill('0')
-                           << std::setw(5) << userID << " " << time
-                           << outputRes(x);
-                } else {
-                    // 1. discount
-                    // TODO actually to know what to offer need to know
-                    // the start and the end transfer or discount wait
-                    // is hard offer discount on ppl accept is hard
+                if (x == Reject) {
+                    // TODO CAN WE WAIT OR DISCOUNT ELSE REJECT
                 }
+                output << ID << " " << type << " " << std::setfill('0')
+                       << std::setw(5) << userID << " " << time << outputRes(x);
+
+                // 1. discount
+                // TODO actually to know what to offer need to know
+                // the start and the end transfer or discount wait
+                // is hard offer discount on ppl accept is hard
+
             } else if (t == "return") {
                 // stationIdReturn userId timeReturn0-1440
                 input >> ID >> userID >> time;

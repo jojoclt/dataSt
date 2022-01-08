@@ -5,6 +5,7 @@
 #include "user.hpp"
 
 extern User user[100000];
+extern bool rejectedUser[100000];
 
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
     maxTransfer[0] = elec, maxTransfer[1] = lady, maxTransfer[2] = road;
@@ -18,6 +19,7 @@ Station::~Station() {}
 Status Station::Rent(int bt, int ID, int timeIn, int disc, int wait) {
     // Check if bike is available
     if (!bikeID[bt].empty()) {
+        if (rejectedUser[ID] && timeIn < transferedTime) return Reject;
         user[ID].Rent(bt, bikeID[bt].top(), timeIn, sID, disc, wait);
         bikeID[bt].pop();
         maxTransfer[bt] = std::min(maxTransfer[bt], bikeID[bt].size());
