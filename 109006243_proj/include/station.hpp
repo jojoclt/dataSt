@@ -11,7 +11,7 @@
 
 class Station {
    public:
-    int costExpected[3][2];  // transfer for Type and discount
+    int costExpected[3];  // transfer for Type and discount
     int size[3];
     int maxTransfer[3];
     MinHeap<pii> waitList[3];  // Plz reverse the minus for MAXHEAP

@@ -77,9 +77,9 @@ int main() {
         User t = user[Rej[i]];
         station[t.sOut].waitList[t.type].push(
             pii(-(t.timeEnd - t.timeSt), Rej[i]));
-        station[t.sOut].costExpected[t.type][0] += t.Return(t.timeEnd, t.sIn);
-        station[t.sOut].costExpected[t.type][1] +=
-            round(costForDisc * (t.timeEnd - t.timeSt));
+        station[t.sOut].costExpected[t.type] += t.Return(t.timeEnd, t.sIn);
+        // station[t.sOut].costExpected[t.type][1] +=
+        //     round(costForDisc * (t.timeEnd - t.timeSt));
     }
     if (DEBUG) {
         expectCost();
@@ -239,8 +239,7 @@ void expectCost() {
     for (int i = 1; i <= maxStation; i++) {
         out << i << ":\n";
         for (int j = 0; j < 3; j++) {
-            out << "TRANSFER:" << station[i].costExpected[j][0]
-                << " DISCOUNT:" << station[i].costExpected[j][1] << "\n";
+            out << "TRANSFER:" << station[i].costExpected[j] << "\n";
         }
         out << "\n";
     }
