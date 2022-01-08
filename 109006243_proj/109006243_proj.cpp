@@ -89,7 +89,7 @@ int main() {
         // stockAtTime();
         MaxTransDisc();
         mapPrint();
-        // outputUserTest();
+        outputUserTest();
     }
     output.close();
 
@@ -102,21 +102,25 @@ int main() {
         money = 0;
         ifstream input;
         ofstream output;
+        output.open("part2_response.txt");
 
         maxTransferOp();
 
+        inputStation(input, path);
         for (int i = 0; i < transferList[0].size(); i++) {
             int from = transferList[0][i].first, to = transferList[0][i].second;
-            int type = transferList[1][i].first;
+            int bt = transferList[1][i].first;
             int &need = transferList[1][i].second;
-            cout << from << " " << to << " " << type << " " << need << "\n ";
+            output << "transfer " << from << " " << to << " " << toName(bt)
+                   << " " << need << " 0\n";
+            // cout << from << " " << to << " " << type << " " << need << "\n ";
+            while (need--) {
+                station[to].bikeID[bt].push(station[from].bikeID[bt].top());
+                station[from].bikeID[bt].pop();
+            }
         }
 
-        return 0;
-        inputStation(input, path);
-
         input.open(path + "/user.txt");
-        output.open("part2_response.txt");
         while (input) {
             string t;
             input >> t;
