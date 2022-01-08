@@ -8,4 +8,5 @@
 
 void initMap();
 void calcDist();
+pii getShortestTransfer(int from, int type);
 #endif

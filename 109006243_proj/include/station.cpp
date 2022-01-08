@@ -7,6 +7,7 @@
 extern User user[100000];
 
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
+    size[0] = elec, size[1] = lady, size[2] = road;
     bikeID[0].heap = fillBike(sID, elec);
     bikeID[1].heap = fillBike(sID, lady);
     bikeID[2].heap = fillBike(sID, road);
@@ -18,11 +19,15 @@ Status Station::Rent(int bt, int ID, int timeIn, int disc, int wait) {
         user[ID].Rent(bt, bikeID[bt].top(), timeIn, sID, disc, wait);
         bikeID[bt].pop();
         return Accept;
-    }
+    } else
+        user[ID].type = bt, user[ID].sOut = sID, user[ID].timeSt = timeIn;
     return Reject;
 }
 bool Station::Return(int ID, int time) {
-    if (!user[ID].isRent) return false;
+    if (!user[ID].isRent) {
+        user[ID].sIn = sID, user[ID].timeEnd = time;
+        return false;
+    }
     addBike(user[ID].type, user[ID].bikeNo);
     user[ID].Return(time, sID);
     return true;

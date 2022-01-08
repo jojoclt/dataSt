@@ -12,6 +12,7 @@
 class Station {
    public:
     // sID bikeID
+    int size[3];
     MinHeap bikeID[3];
     Station() : sID(-1) {}
     Station(int sID, int elec, int lady, int road);
@@ -25,6 +26,7 @@ class Station {
     void printStation_1(std::ostream& os);
 
    public:
+    int stockAtTime[1442][3] = {};
     int sID;
     int toBike(int sID, int x) { return sID * 100 + x; }
     Vector<int> fillBike(int sID, int x);

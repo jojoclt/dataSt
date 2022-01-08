@@ -1,3 +1,5 @@
+#ifndef INPUT_HPP
+#define INPUT_HPP
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -15,6 +17,12 @@ int toBike(std::string b) {
     if (b == "lady") return 1;
     if (b == "road") return 2;
     return 0;
+}
+std::string toName(int i) {
+    if (i == 0) return "electric";
+    if (i == 1) return "lady";
+    if (i == 2) return "road";
+    return "BAD";
 }
 void inputMap(std::ifstream &os, std::string path) {
     os.open(path + "/map.txt");
@@ -53,3 +61,4 @@ void inputFee(std::ifstream &os, std::string path) {
     }
     os.close();
 }
+#endif

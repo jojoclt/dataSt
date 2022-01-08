@@ -8,7 +8,7 @@ extern int money;
 extern int map[MAXN][MAXN];
 extern pii bikeRate[3];
 class User {
-   protected:
+   public:
     int type;
     int bikeNo;
     int timeSt, timeEnd;
@@ -19,7 +19,7 @@ class User {
 
    public:
     friend class Station;
-    User() : isRent(false), discount(1), waitTime(0) {}
+    User() : isRent(false), discount(1), waitTime(0), type(-1) {}
 
     void Rent(int bt, int no, int time, int stat, int disc = 1, int wait = 0);
 

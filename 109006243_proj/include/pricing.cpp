@@ -19,3 +19,5 @@ void calcDist() {
                 if (map[i][j] > map[i][k] + map[k][j])
                     map[i][j] = map[i][k] + map[k][j];
 }
+
+pii getShortestTransfer(int from, int type) {}
