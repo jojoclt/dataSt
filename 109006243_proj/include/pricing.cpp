@@ -4,7 +4,8 @@
 #define MAXN 505
 int money = 0;
 int **map;
-int waitFee, reduceRate, rateofTransfer;
+int waitFee, rateofTransfer;
+float reduceRate;
 pii bikeRate[3];
 void initMap(int c) {
     map = new int *[c + 1];

@@ -7,7 +7,8 @@
 #include "pricing.hpp"
 #include "station.hpp"
 extern int **map;
-extern int waitFee, reduceRate, rateofTransfer;
+extern int waitFee, rateofTransfer;
+extern float reduceRate;
 extern pii bikeRate[3];
 extern Station *station;
 extern int maxStation;
@@ -39,15 +40,17 @@ void inputMap(std::ifstream &os, std::string path) {
 }
 
 void inputStation(std::ifstream &os, std::string path) {
-    os.open(path + "/station.txt");
-    while (os) {
-        int ID, elecAmt, ladyAmt, roadAmt;
-        os >> ID >> elecAmt >> ladyAmt >> roadAmt;
-        // station[ID] = Station(ID, elecAmt, ladyAmt, roadAmt);
-        maxStation = max(ID, maxStation);
+    if (station == nullptr) {
+        os.open(path + "/station.txt");
+        while (os) {
+            int ID, elecAmt, ladyAmt, roadAmt;
+            os >> ID >> elecAmt >> ladyAmt >> roadAmt;
+            // station[ID] = Station(ID, elecAmt, ladyAmt, roadAmt);
+            maxStation = max(ID, maxStation);
+        }
+        os.close();
+        station = new Station[maxStation + 1];
     }
-    os.close();
-    station = new Station[maxStation + 1];
     os.open(path + "/station.txt");
     while (os) {
         int ID, elecAmt, ladyAmt, roadAmt;
@@ -60,7 +63,7 @@ void inputStation(std::ifstream &os, std::string path) {
 
 void inputFee(std::ifstream &os, std::string path) {
     os.open(path + "/fee.txt");
-    while (os) {
+    while (os.good()) {
         std::string type;
         pii rate;
         for (int i = 0; i < 3; i++) {

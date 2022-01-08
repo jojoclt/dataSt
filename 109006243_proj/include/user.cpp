@@ -1,7 +1,6 @@
 #include "user.hpp"
 
 User user[100000];
-extern int waitFee;
 void User::operator=(const User &u) {
     type = u.type;
     bikeNo = u.bikeNo;
@@ -25,11 +24,9 @@ int User::Return(int time2, int _sIn) {
     int dt = time2 - timeSt;
     int t;
     if (dt <= map[sOut][_sIn]) {
-        t = round((bikeRate[type].first * dt) * discount) +
-            (waitTime * waitFee);
+        t = (bikeRate[type].first * dt);
     } else {
-        t = round((bikeRate[type].second * dt) * discount) +
-            (waitTime * waitFee);
+        t = (bikeRate[type].second * dt);
     }
     isRent = false;
     return t;
