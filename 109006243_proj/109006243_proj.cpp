@@ -195,7 +195,7 @@ void outputUserTest() {
 void MaxTransDisc() {
     ofstream out;
     out.open("maxTrans.txt");
-    for (int i = 0; i < maxStation; i++) {
+    for (int i = 0; i <= maxStation; i++) {
         if (station[i].sID != -1) {
             out << i << " ";
             for (int j = 0; j < 3; j++) out << station[i].maxTransfer[j] << " ";

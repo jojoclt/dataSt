@@ -41,6 +41,7 @@ void maxTransferOp() {
                 station[t.second].maxTransfer[bt] -= need;
                 // add transfer list type
                 // moveon
+                station[c].costExpected[bt] = 0;
             }
             // min of required bike
             c = getTransferMaxStation(bt);
@@ -56,12 +57,11 @@ int getTransferMaxStation(int bt) {
     int c = 0;
     int temp = -1;
     for (int i = 0; i <= maxStation; i++) {
-        if (c < station[i].costExpected[bt]) {
+        if (c < station[i].costExpected[bt] && station[i].waitList[bt].size()) {
             c = station[i].costExpected[bt];
             temp = i;
         }
     }
-    if (temp != -1) station[temp].costExpected[bt] = 0;
     return temp;
 }
 pii getShortestTransfer(int from, int bt, int minTran) {
