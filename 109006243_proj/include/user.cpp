@@ -21,9 +21,9 @@ void User::Rent(int bt, int no, int time, int stat, bool disc, int wait) {
 }
 int User::Return(int time2, int _sIn) {
     sIn = _sIn, timeEnd = time2;
-    int dt = time2 - timeSt;
+    int dt = timeEnd - timeSt;
     int t;
-    if (dt <= map[sOut][_sIn]) {
+    if (dt <= map[sOut][sIn]) {
         t = (bikeRate[type].first * dt);
     } else {
         t = (bikeRate[type].second * dt);

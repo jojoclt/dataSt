@@ -21,7 +21,7 @@ Status Station::Rent(int bt, int ID, int timeIn, bool disc, int wait) {
     // Check if bike is available
     if (!bikeID[bt].empty()) {
         // what??
-        if (rejectedUser[ID] && timeIn < transferedTime[bt]) return Reject;
+        if (wait == 0 && rejectedUser[ID] && timeIn < transferedTime[bt]) return Reject;
         user[ID].Rent(bt, bikeID[bt].top(), timeIn, sID, disc, wait);
         bikeID[bt].pop();
         if (firstTime)

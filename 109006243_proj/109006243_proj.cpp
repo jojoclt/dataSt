@@ -33,8 +33,8 @@ void MaxTransDisc();
 void mapPrint();
 void waitListPrint();
 void expectCost();
-string path = "./test_case/DS_testcase/open_basic2/test_case";
-// string path = "./test_case";
+// string path = "./test_case/DS_testcase/open_basic2/test_case";
+string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
@@ -138,16 +138,23 @@ int main() {
             output << ID << " " << type << " " << std::setfill('0')
                    << std::setw(5) << userID << " " << time;
             if (x == Reject) {
+                // TODO FIXX
+                // FIXME
                 // check maxTrans stock
                 // compare between wait and discount
 
                 // DISCOUNT
-                int i, moneyDisc = 0, moneyWait = 0;
+                int moneyDisc = -1e9, moneyWait = -1e9;
                 int maxI;
-                for (i = 0; i < 3; i++) {
+                int t;
+                int dt = user[userID].timeEnd - user[userID].timeSt;
+
+                for (int i = 0; i < 3; i++) {
                     if (station[ID].maxTransfer[i]) {
-                        int t = round(reduceRate * user[userID].Return(user[userID].timeEnd,
-                                                                       user[userID].sIn));
+                        if (map[user[userID].sOut][user[userID].sIn] <= dt)
+                            t = round(reduceRate * dt * bikeRate[i].first);
+                        else
+                            t = round(reduceRate * dt * bikeRate[i].second);
                         if (moneyDisc < t) {
                             moneyDisc = t;
                             maxI = i;
@@ -155,7 +162,7 @@ int main() {
                     }
                 }
                 // WAIT
-                int dt = station[ID].transferedTime[toBike(type)] - time;
+                dt = station[ID].transferedTime[toBike(type)] - time;
                 if (time < station[ID].transferedTime[toBike(type)])
                     moneyWait = user[userID].Return(user[userID].timeEnd,
                                                     user[userID].sIn) -
@@ -164,9 +171,10 @@ int main() {
                 if (moneyDisc <= 0 && moneyWait <= 0) {
                     output << outputRes(x);
                 } else {
+                    // cout << moneyWait << " " << moneyDisc << endl;
                     if (moneyWait >= moneyDisc) {
                         output << "\nwait\n";
-                        station[ID].Rent(i, userID, time, false, dt);
+                        station[ID].Rent(toBike(type), userID, time, false, dt);
                     } else {
                         output << "\ndiscount " << toName(maxI) << "\n";
                         station[ID].Rent(maxI, userID, time, true);
