@@ -13,15 +13,16 @@ class User {
     int bikeNo;
     int timeSt, timeEnd;
     int sIn, sOut;
-    int discount;
+    bool discount;
     int waitTime;
     bool isRent;
 
    public:
     friend class Station;
-    User() : isRent(false), discount(1), waitTime(0), type(-1) {}
+    User() : isRent(false), discount(false), waitTime(0), type(-1) {}
     void operator=(const User &u);
-    void Rent(int bt, int no, int time, int stat, int disc = 1, int wait = 0);
+    void Rent(int bt, int no, int time, int stat, bool disc = false,
+              int wait = 0);
 
     int Return(int time2, int _sIn);
 };

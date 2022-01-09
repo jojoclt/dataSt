@@ -11,8 +11,8 @@
 using namespace std;
 
 int costForDisc = 123456;
-int DEBUG = 1;
-int DEBUG2 = 0;
+int DEBUG = 0;
+int case2 = 1;
 int DEBUG3 = 1;
 int maxStation = 0;
 extern User user[100000];
@@ -24,6 +24,7 @@ g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 Station *station;
 Vector<int> Rej;
 bool rejectedUser[100000];
+bool firstTime = true;
 
 void stockAtTime();
 void outputUserTest();
@@ -32,13 +33,12 @@ void MaxTransDisc();
 void mapPrint();
 void waitListPrint();
 void expectCost();
-string path = "./test_case/DS_testcase/open_basic3";
-// string path = "./test_case";
+// string path = "./test_case/DS_testcase/open_basic3";
+string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
     ofstream output;
-
     inputStation(input, path);
     inputMap(input, path);
     inputFee(input, path);
@@ -93,6 +93,7 @@ int main() {
         mapPrint();
         // outputUserTest();
     }
+    input.close();
     output.close();
 
     output.open("part1_status.txt");
@@ -100,12 +101,12 @@ int main() {
     output << money;
     output.close();
     // for part 2
-    if (!DEBUG2) {
+    if (case2) {
+        firstTime = false;
+        // MaxTransDisc();
         money = 0;
-        ifstream input;
-        ofstream output;
-        output.open("part2_response.txt");
 
+        output.open("part2_response.txt");
         maxTransferOp();
 
         inputStation(input, path);
@@ -113,7 +114,7 @@ int main() {
             int from = transferList[0][i].first, to = transferList[0][i].second;
             int bt = transferList[1][i].first;
             int &need = transferList[1][i].second;
-            station[to].transferedTime = map[from][to];
+            station[to].transferedTime[bt] = map[from][to];
             output << "transfer " << from << " " << to << " " << toName(bt)
                    << " " << need << " 0\n";
             // cout << from << " " << to << " " << type << " " << need << "\n ";
@@ -134,11 +135,23 @@ int main() {
                 // stationIdRent bikeType userId(5digit) timeRent
                 input >> ID >> type >> userID >> time;
                 Status x = station[ID].Rent(toBike(type), userID, time);
-                if (x == Reject) {
-                    // TODO CAN WE WAIT OR DISCOUNT ELSE REJECT
-                }
                 output << ID << " " << type << " " << std::setfill('0')
-                       << std::setw(5) << userID << " " << time << outputRes(x);
+                       << std::setw(5) << userID << " " << time;
+                if (x == Reject) {
+                    // check maxTrans stock
+                    int i;
+                    for (i = 2; i >= 0; i--) {
+                        if (station[ID].maxTransfer[i]) {
+                            x = station[ID].Rent(i, userID, time, true);
+                            output << outputRes(x) << toName(i) << "\n";
+                            station[ID].maxTransfer[i]--;
+                            break;
+                        }
+                    }
+                    if (i == -1) output << outputRes(x);
+                    // TODO CAN WE WAIT OR DISCOUNT ELSE REJECT
+                } else
+                    output << outputRes(x);
 
                 // 1. discount
                 // TODO actually to know what to offer need to know
@@ -153,6 +166,7 @@ int main() {
                 bool x = station[ID].Return(userID, time);
             }
         }
+        // MaxTransDisc();
         output.close();
         output.open("part2_status.txt");
         for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);

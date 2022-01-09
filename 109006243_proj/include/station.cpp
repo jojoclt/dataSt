@@ -6,23 +6,27 @@
 
 extern User user[100000];
 extern bool rejectedUser[100000];
+extern bool firstTime;
 
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
     maxTransfer[0] = elec, maxTransfer[1] = lady, maxTransfer[2] = road;
-    for (int i = 0; i < 3; i++) costExpected[i] = 0;
+    for (int i = 0; i < 3; i++) costExpected[i] = 0, transferedTime[i] = 0;
     size[0] = elec, size[1] = lady, size[2] = road;
     bikeID[0].heap = fillBike(sID, elec);
     bikeID[1].heap = fillBike(sID, lady);
     bikeID[2].heap = fillBike(sID, road);
 }
 Station::~Station() {}
-Status Station::Rent(int bt, int ID, int timeIn, int disc, int wait) {
+Status Station::Rent(int bt, int ID, int timeIn, bool disc, int wait) {
     // Check if bike is available
     if (!bikeID[bt].empty()) {
-        if (rejectedUser[ID] && timeIn < transferedTime) return Reject;
+        // what??
+        if (rejectedUser[ID] && timeIn < transferedTime[bt]) return Reject;
         user[ID].Rent(bt, bikeID[bt].top(), timeIn, sID, disc, wait);
         bikeID[bt].pop();
-        maxTransfer[bt] = std::min(maxTransfer[bt], bikeID[bt].size());
+        if (firstTime)
+            maxTransfer[bt] = std::min(maxTransfer[bt], bikeID[bt].size());
+        if (disc) return Discount;
         return Accept;
     } else
         user[ID].type = bt, user[ID].sOut = sID, user[ID].timeSt = timeIn;

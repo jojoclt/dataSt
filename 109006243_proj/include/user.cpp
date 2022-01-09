@@ -10,7 +10,7 @@ void User::operator=(const User &u) {
     waitTime = u.waitTime;
     isRent = u.isRent;
 }
-void User::Rent(int bt, int no, int time, int stat, int disc, int wait) {
+void User::Rent(int bt, int no, int time, int stat, bool disc, int wait) {
     type = bt;
     bikeNo = no;
     timeSt = time;
@@ -29,5 +29,6 @@ int User::Return(int time2, int _sIn) {
         t = (bikeRate[type].second * dt);
     }
     isRent = false;
+    if (discount) return round(0.8 * t);
     return t;
 }

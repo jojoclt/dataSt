@@ -35,6 +35,7 @@ void maxTransferOp() {
             int need = station[c].waitList[bt].size();
             // already get station then search for its shortest transfer with
             pii t = getShortestTransfer(c, bt, need);
+            if (t.second == -1) break;
             if (t.first * rateofTransfer < station[c].costExpected[bt]) {
                 // sth about min(need, t.second)
                 Transfer(t.second, c, bt, need);

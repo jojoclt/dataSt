@@ -2,6 +2,6 @@
 std::string outputRes(Status c) {
     if (c == Accept) return "\naccept\n";
     if (c == Reject) return "\nreject\n";
-    if (c == Discount) return "XXDDDDD Discount need TP!";
+    if (c == Discount) return "\ndiscount ";
     return "NOOO!!!";
 }
