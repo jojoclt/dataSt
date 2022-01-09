@@ -26,6 +26,7 @@ Status Station::Rent(int bt, int ID, int timeIn, bool disc, int wait) {
         bikeID[bt].pop();
         if (firstTime)
             maxTransfer[bt] = std::min(maxTransfer[bt], bikeID[bt].size());
+        if (wait) return Wait;
         if (disc) return Discount;
         return Accept;
     } else

@@ -101,101 +101,100 @@ int main() {
     output << money;
     output.close();
     // for part 2
-    if (case2) {
-        firstTime = false;
-        // MaxTransDisc();
-        money = 0;
 
-        output.open("part2_response.txt");
-        maxTransferOp();
+    firstTime = false;
 
-        inputStation(input, path);
-        for (int i = 0; i < transferList[0].size(); i++) {
-            int from = transferList[0][i].first, to = transferList[0][i].second;
-            int bt = transferList[1][i].first;
-            int &need = transferList[1][i].second;
-            station[to].transferedTime[bt] = map[from][to];
-            output << "transfer " << from << " " << to << " " << toName(bt)
-                   << " " << need << " 0\n";
-            // cout << from << " " << to << " " << type << " " << need << "\n ";
-            while (need--) {
-                station[to].bikeID[bt].push(station[from].bikeID[bt].top());
-                station[from].bikeID[bt].pop();
-            }
+    money = 0;
+
+    output.open("part2_response.txt");
+    maxTransferOp();
+
+    inputStation(input, path);
+    for (int i = 0; i < transferList[0].size(); i++) {
+        int from = transferList[0][i].first, to = transferList[0][i].second;
+        int bt = transferList[1][i].first;
+        int &need = transferList[1][i].second;
+        station[to].transferedTime[bt] = map[from][to];
+        output << "transfer " << from << " " << to << " " << toName(bt)
+               << " " << need << " 0\n";
+        // cout << from << " " << to << " " << type << " " << need << "\n ";
+        while (need--) {
+            station[to].bikeID[bt].push(station[from].bikeID[bt].top());
+            station[from].bikeID[bt].pop();
         }
-
-        input.open(path + "/user.txt");
-        while (input) {
-            string t;
-            input >> t;
-            output << t << " ";
-            int ID, userID, time;
-            string type;
-            if (t == "rent") {
-                // stationIdRent bikeType userId(5digit) timeRent
-                input >> ID >> type >> userID >> time;
-                Status x = station[ID].Rent(toBike(type), userID, time);
-                output << ID << " " << type << " " << std::setfill('0')
-                       << std::setw(5) << userID << " " << time;
-                if (x == Reject) {
-                    // check maxTrans stock
-                    // compare between wait and discount
-
-                    // DISCOUNT
-                    int i, moneyDisc = 0, moneyWait = 0;
-                    int maxI;
-                    for (i = 0; i < 3; i++) {
-                        if (station[ID].maxTransfer[i]) {
-                            int t = user[userID].Return(user[userID].timeEnd,
-                                                        user[userID].sIn);
-                            if (moneyDisc < t) {
-                                moneyDisc = t;
-                                maxI = i;
-                            }
-                        }
-                    }
-                    // WAIT
-                    int dt = station[ID].transferedTime[toBike(type)] - time;
-                    if (time < station[ID].transferedTime[toBike(type)])
-                        moneyWait = user[userID].Return(user[userID].timeEnd,
-                                                        user[userID].sIn) -
-                                    (waitFee * dt);
-
-                    if (moneyDisc <= 0 && moneyWait <= 0) {
-                        output << outputRes(x);
-                    } else {
-                        if (moneyWait >= moneyDisc) {
-                            output << "\nwait\n";
-                            station[ID].Rent(i, userID, time, false, dt);
-                        } else {
-                            output << "\ndiscount " << toName(maxI) << "\n";
-                            station[ID].Rent(maxI, userID, time, true);
-                            station[ID].maxTransfer[maxI]--;
-                        }
-                    }
-                } else
-                    output << outputRes(x);
-
-                // 1. discount
-                // TODO actually to know what to offer need to know
-                // the start and the end transfer or discount wait
-                // is hard offer discount on ppl accept is hard
-
-            } else if (t == "return") {
-                // stationIdReturn userId timeReturn0-1440
-                input >> ID >> userID >> time;
-                output << ID << " " << std::setfill('0') << std::setw(5)
-                       << userID << " " << time << "\n";
-                bool x = station[ID].Return(userID, time);
-            }
-        }
-        // MaxTransDisc();
-        output.close();
-        output.open("part2_status.txt");
-        for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);
-        output << money;
-        output.close();
     }
+
+    input.open(path + "/user.txt");
+    while (input) {
+        string t;
+        input >> t;
+        output << t << " ";
+        int ID, userID, time;
+        string type;
+        if (t == "rent") {
+            // stationIdRent bikeType userId(5digit) timeRent
+            input >> ID >> type >> userID >> time;
+            Status x = station[ID].Rent(toBike(type), userID, time);
+            output << ID << " " << type << " " << std::setfill('0')
+                   << std::setw(5) << userID << " " << time;
+            if (x == Reject) {
+                // check maxTrans stock
+                // compare between wait and discount
+
+                // DISCOUNT
+                int i, moneyDisc = 0, moneyWait = 0;
+                int maxI;
+                for (i = 0; i < 3; i++) {
+                    if (station[ID].maxTransfer[i]) {
+                        int t = round(reduceRate * user[userID].Return(user[userID].timeEnd,
+                                                                       user[userID].sIn));
+                        if (moneyDisc < t) {
+                            moneyDisc = t;
+                            maxI = i;
+                        }
+                    }
+                }
+                // WAIT
+                int dt = station[ID].transferedTime[toBike(type)] - time;
+                if (time < station[ID].transferedTime[toBike(type)])
+                    moneyWait = user[userID].Return(user[userID].timeEnd,
+                                                    user[userID].sIn) -
+                                (waitFee * dt);
+
+                if (moneyDisc <= 0 && moneyWait <= 0) {
+                    output << outputRes(x);
+                } else {
+                    if (moneyWait >= moneyDisc) {
+                        output << "\nwait\n";
+                        station[ID].Rent(i, userID, time, false, dt);
+                    } else {
+                        output << "\ndiscount " << toName(maxI) << "\n";
+                        station[ID].Rent(maxI, userID, time, true);
+                        station[ID].maxTransfer[maxI]--;
+                    }
+                }
+            } else
+                output << outputRes(x);
+
+            // 1. discount
+            // TODO actually to know what to offer need to know
+            // the start and the end transfer or discount wait
+            // is hard offer discount on ppl accept is hard
+
+        } else if (t == "return") {
+            // stationIdReturn userId timeReturn0-1440
+            input >> ID >> userID >> time;
+            output << ID << " " << std::setfill('0') << std::setw(5)
+                   << userID << " " << time << "\n";
+            bool x = station[ID].Return(userID, time);
+        }
+    }
+    // MaxTransDisc();
+    output.close();
+    output.open("part2_status.txt");
+    for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);
+    output << money;
+    output.close();
 }
 void stockAtTime() {
     int t[3];

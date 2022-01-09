@@ -29,7 +29,7 @@ int User::Return(int time2, int _sIn) {
         t = (bikeRate[type].second * dt);
     }
     isRent = false;
-    if (discount) return round(0.8 * t);
+    if (discount) return round(reduceRate * t);
     if (waitTime) return t - (waitTime * waitFee);
     return t;
 }

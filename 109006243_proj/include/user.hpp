@@ -8,6 +8,7 @@ extern int money;
 extern int **map;
 extern pii bikeRate[3];
 extern int waitFee;
+extern float reduceRate;
 class User {
    public:
     int type;
