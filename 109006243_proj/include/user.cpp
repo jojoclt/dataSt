@@ -7,8 +7,8 @@ void User::operator=(const User &u) {
     timeSt = u.timeSt, timeEnd = u.timeEnd;
     sIn = u.sIn, sOut = u.sOut;
     discount = u.discount;
-    waitTime = u.waitTime;
     isRent = u.isRent;
+    waitTime = u.waitTime;
 }
 void User::Rent(int bt, int no, int time, int stat, bool disc, int wait) {
     type = bt;
@@ -16,8 +16,8 @@ void User::Rent(int bt, int no, int time, int stat, bool disc, int wait) {
     timeSt = time;
     sOut = stat;
     discount = disc;
-    waitTime = wait;
     isRent = true;
+    waitTime = wait;
 }
 int User::Return(int time2, int _sIn) {
     sIn = _sIn, timeEnd = time2;
@@ -30,5 +30,6 @@ int User::Return(int time2, int _sIn) {
     }
     isRent = false;
     if (discount) return round(0.8 * t);
+    if (waitTime) return t - (waitTime * waitFee);
     return t;
 }

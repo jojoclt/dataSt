@@ -85,12 +85,12 @@ int main() {
         //     round(costForDisc * (t.timeEnd - t.timeSt));
     }
     if (DEBUG) {
-        expectCost();
+        // expectCost();
         // waitListPrint();
         // RejectOut();
-        // stockAtTime();
-        MaxTransDisc();
-        mapPrint();
+        stockAtTime();
+        // MaxTransDisc();
+        // mapPrint();
         // outputUserTest();
     }
     input.close();
@@ -139,17 +139,36 @@ int main() {
                        << std::setw(5) << userID << " " << time;
                 if (x == Reject) {
                     // check maxTrans stock
-                    int i;
+                    // compare between wait and discount
+
+                    // DISCOUNT
+                    int i, moneyDisc = 0, moneyWait = 0;
                     for (i = 2; i >= 0; i--) {
                         if (station[ID].maxTransfer[i]) {
-                            x = station[ID].Rent(i, userID, time, true);
-                            output << outputRes(x) << toName(i) << "\n";
-                            station[ID].maxTransfer[i]--;
+                            moneyDisc = user[userID].Return(
+                                user[userID].timeEnd, user[userID].sIn);
                             break;
                         }
                     }
-                    if (i == -1) output << outputRes(x);
-                    // TODO CAN WE WAIT OR DISCOUNT ELSE REJECT
+                    // WAIT
+                    int dt = station[ID].transferedTime[toBike(type)] - time;
+                    if (time < station[ID].transferedTime[toBike(type)])
+                        moneyWait = user[userID].Return(user[userID].timeEnd,
+                                                        user[userID].sIn) -
+                                    (waitFee * dt);
+
+                    if (moneyDisc == 0 && moneyWait == 0) {
+                        output << outputRes(x);
+                    } else {
+                        if (moneyWait >= moneyDisc) {
+                            output << "\nwait\n";
+                            station[ID].Rent(i, userID, time, false, dt);
+                        } else {
+                            output << "discount " << toName(i) << "\n";
+                            station[ID].Rent(i, userID, time, true);
+                            station[ID].maxTransfer[i]--;
+                        }
+                    }
                 } else
                     output << outputRes(x);
 
