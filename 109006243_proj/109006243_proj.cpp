@@ -143,11 +143,15 @@ int main() {
 
                     // DISCOUNT
                     int i, moneyDisc = 0, moneyWait = 0;
-                    for (i = 2; i >= 0; i--) {
+                    int maxI;
+                    for (i = 0; i < 3; i++) {
                         if (station[ID].maxTransfer[i]) {
-                            moneyDisc = user[userID].Return(
-                                user[userID].timeEnd, user[userID].sIn);
-                            break;
+                            int t = user[userID].Return(user[userID].timeEnd,
+                                                        user[userID].sIn);
+                            if (moneyDisc < t) {
+                                moneyDisc = t;
+                                maxI = i;
+                            }
                         }
                     }
                     // WAIT
@@ -157,16 +161,16 @@ int main() {
                                                         user[userID].sIn) -
                                     (waitFee * dt);
 
-                    if (moneyDisc == 0 && moneyWait == 0) {
+                    if (moneyDisc <= 0 && moneyWait <= 0) {
                         output << outputRes(x);
                     } else {
                         if (moneyWait >= moneyDisc) {
                             output << "\nwait\n";
                             station[ID].Rent(i, userID, time, false, dt);
                         } else {
-                            output << "discount " << toName(i) << "\n";
-                            station[ID].Rent(i, userID, time, true);
-                            station[ID].maxTransfer[i]--;
+                            output << "\ndiscount " << toName(maxI) << "\n";
+                            station[ID].Rent(maxI, userID, time, true);
+                            station[ID].maxTransfer[maxI]--;
                         }
                     }
                 } else
