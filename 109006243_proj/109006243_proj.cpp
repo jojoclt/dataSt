@@ -79,7 +79,7 @@ int main() {
 
     output.open("part1_status.txt");
     for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);
-    output << money;
+    output << money << "\n";
     output.close();
 
     // for part 2
@@ -186,7 +186,7 @@ int main() {
     output.close();
     output.open("part2_status.txt");
     for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);
-    output << money;
+    output << money << "\n";
     output.close();
 }
 
