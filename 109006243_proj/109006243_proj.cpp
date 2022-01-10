@@ -26,8 +26,8 @@ Station *station;
 bool rejectedUser[100000];
 bool firstTime = true;
 
-string path = "./test_case/DS_testcase/open_basic3/test_case";
-// string path = "./test_case";
+// string path = "./test_case/DS_testcase/open_basic3/test_case";
+string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
@@ -39,6 +39,7 @@ int main() {
     input.open(path + "/user.txt");
     output.open("part1_response.txt");
 
+    // part1
     while (input) {
         string t;
         input >> t;
@@ -80,6 +81,7 @@ int main() {
     for (int i = 0; i <= maxStation; i++) station[i].printStation_1(output);
     output << money;
     output.close();
+
     // for part 2
 
     firstTime = false;

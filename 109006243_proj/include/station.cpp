@@ -60,7 +60,7 @@ void Station::addBike(int type, int bike) { bikeID[type].push(bike); }
 
 void Station::printBike(int bt, std::ostream& os) {
     while (!bikeID[bt].empty()) {
-        os << bikeID[bt].top() << " ";
+        os << " " << bikeID[bt].top();
         bikeID[bt].pop();
     }
     os << "\n";
@@ -68,11 +68,11 @@ void Station::printBike(int bt, std::ostream& os) {
 void Station::printStation_1(std::ostream& os) {
     if (sID != -1) {
         os << sID << ":\n";
-        os << "electric: ";
+        os << "electric:";
         printBike(0, os);
-        os << "lady: ";
+        os << "lady:";
         printBike(1, os);
-        os << "road: ";
+        os << "road:";
         printBike(2, os);
     }
 }
