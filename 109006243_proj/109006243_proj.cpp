@@ -26,8 +26,8 @@ Station *station;
 bool rejectedUser[100000];
 bool firstTime = true;
 
-// string path = "./test_case/DS_testcase/open_basic3/test_case";
-string path = "./test_case";
+string path = "./test_case/DS_testcase/open_basic3/test_case";
+// string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
@@ -151,8 +151,13 @@ int main() {
                 } else {
                     // cout << moneyWait << " " << moneyDisc << endl;
                     if (moneyWait >= moneyDisc) {
-                        output << "\nwait\n";
-                        station[ID].Rent(toBike(type), userID, time, false, dt);
+                        if (dt + user[userID].timeEnd > 1440)
+                            output << outputRes(x);
+                        else {
+                            output << "\nwait\n";
+                            station[ID].Rent(toBike(type), userID, time, false,
+                                             dt);
+                        }
                     } else {
                         output << "\ndiscount " << toName(maxI) << "\n";
                         station[ID].Rent(maxI, userID, time, true);

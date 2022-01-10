@@ -20,6 +20,7 @@ Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
 Station::~Station() {}
 Status Station::Rent(int bt, int ID, int timeIn, bool disc, int wait) {
     // Check if bike is available
+    if (timeIn > 1440) return Reject;
     if (!bikeID[bt].empty()) {
         // what??
         if (wait == 0 && rejectedUser[ID] && timeIn < transferedTime[bt])
@@ -36,6 +37,7 @@ Status Station::Rent(int bt, int ID, int timeIn, bool disc, int wait) {
     return Reject;
 }
 bool Station::Return(int ID, int time) {
+    if (time > 1440) return false;
     if (!user[ID].isRent) {
         user[ID].sIn = sID, user[ID].timeEnd = time;
         return false;
