@@ -40,7 +40,7 @@ int main() {
     output.open("part1_response.txt");
 
     // part1
-    while (input) {
+    while (input.good()) {
         string t;
         input >> t;
         output << t << " ";
@@ -107,7 +107,7 @@ int main() {
     }
 
     input.open(path + "/user.txt");
-    while (input) {
+    while (input.good()) {
         string t;
         input >> t;
         output << t << " ";

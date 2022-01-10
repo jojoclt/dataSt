@@ -8,4 +8,3 @@ return 1 00002 85
 rent 3 electric 00003 90
 accept
 return 1 00003 1440
- 
