@@ -26,7 +26,7 @@ Station *station;
 bool rejectedUser[100000];
 bool firstTime = true;
 
-// string path = "./test_case/DS_testcase/open_basic2/test_case";
+// string path = "./test_case/DS_testcase/open_basic3/test_case";
 string path = "./test_case";
 int main() {
     money = 0;
@@ -118,8 +118,6 @@ int main() {
             output << ID << " " << type << " " << std::setfill('0')
                    << std::setw(5) << userID << " " << time;
             if (x == Reject) {
-                // TODO FIXX
-                // FIXME
                 // check maxTrans stock
                 // compare between wait and discount
 
