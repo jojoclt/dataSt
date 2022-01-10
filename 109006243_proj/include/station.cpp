@@ -10,7 +10,8 @@ extern bool firstTime;
 
 Station::Station(int sID, int elec, int lady, int road) : sID(sID) {
     maxTransfer[0] = elec, maxTransfer[1] = lady, maxTransfer[2] = road;
-    for (int i = 0; i < 3; i++) costExpected[i] = 0, transferedTime[i] = 0;
+    for (int i = 0; i < 3; i++)
+        costExpected[i] = 0, transferedTime[i] = 0, waitCount[i] = 0;
     size[0] = elec, size[1] = lady, size[2] = road;
     bikeID[0].heap = fillBike(sID, elec);
     bikeID[1].heap = fillBike(sID, lady);
@@ -21,7 +22,8 @@ Status Station::Rent(int bt, int ID, int timeIn, bool disc, int wait) {
     // Check if bike is available
     if (!bikeID[bt].empty()) {
         // what??
-        if (wait == 0 && rejectedUser[ID] && timeIn < transferedTime[bt]) return Reject;
+        if (wait == 0 && rejectedUser[ID] && timeIn < transferedTime[bt])
+            return Reject;
         user[ID].Rent(bt, bikeID[bt].top(), timeIn, sID, disc, wait);
         bikeID[bt].pop();
         if (firstTime)

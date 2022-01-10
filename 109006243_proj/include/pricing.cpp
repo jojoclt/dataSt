@@ -4,7 +4,6 @@
 
 #include "station.hpp"
 #include "vector.hpp"
-#define MAXN 505
 int money = 0;
 int **map;
 int waitFee, rateofTransfer;
@@ -32,7 +31,7 @@ void maxTransferOp() {
     for (int bt = 0; bt < 3; bt++) {
         int c = getTransferMaxStation(bt);
         while (c != -1) {
-            int need = station[c].waitList[bt].size();
+            int need = station[c].waitCount[bt];
             // already get station then search for its shortest transfer with
             pii t = getShortestTransfer(c, bt, need);
             if (t.second == -1) break;
@@ -59,7 +58,7 @@ int getTransferMaxStation(int bt) {
     int c = 0;
     int temp = -1;
     for (int i = 0; i <= maxStation; i++) {
-        if (c < station[i].costExpected[bt] && station[i].waitList[bt].size()) {
+        if (c < station[i].costExpected[bt] && station[i].waitCount[bt]) {
             c = station[i].costExpected[bt];
             temp = i;
         }

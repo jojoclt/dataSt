@@ -17,22 +17,15 @@ int DEBUG3 = 1;
 int maxStation = 0;
 extern User user[100000];
 extern Vector<pii> transferList[2];
+void expectCost();
 /*
 g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 ./109006243_proj
 */
 Station *station;
-Vector<int> Rej;
 bool rejectedUser[100000];
 bool firstTime = true;
 
-void stockAtTime();
-void outputUserTest();
-void RejectOut();
-void MaxTransDisc();
-void mapPrint();
-void waitListPrint();
-void expectCost();
 // string path = "./test_case/DS_testcase/open_basic2/test_case";
 string path = "./test_case";
 int main() {
@@ -58,10 +51,8 @@ int main() {
             Status x = station[ID].Rent(toBike(type), userID, time);
             output << ID << " " << type << " " << std::setfill('0')
                    << std::setw(5) << userID << " " << time << outputRes(x);
-            if (DEBUG && x == Accept)
-                station[ID].stockAtTime[time][toBike(type)]--;
+
             if (x == Reject) {
-                Rej.push_back(userID);
                 rejectedUser[userID] = true;
             }
 
@@ -71,28 +62,17 @@ int main() {
             output << ID << " " << std::setfill('0') << std::setw(5) << userID
                    << " " << time << "\n";
             bool x = station[ID].Return(userID, time);
-            if (DEBUG && x == true)
-                station[ID].stockAtTime[time][user[userID].type]++;
         }
     }
     // PUSH BACK THE USER DATA TO WAITLIST
-    for (int i = 0; i < Rej.size(); i++) {
-        User t = user[Rej[i]];
-        station[t.sOut].waitList[t.type].push(
-            pii(-(t.timeEnd - t.timeSt), Rej[i]));
+    for (int i = 0; i < 100000; i++) {
+        if (!rejectedUser[i]) continue;
+        User t = user[i];
+        station[t.sOut].waitCount[t.type]++;
         station[t.sOut].costExpected[t.type] += t.Return(t.timeEnd, t.sIn);
-        // station[t.sOut].costExpected[t.type][1] +=
-        //     round(costForDisc * (t.timeEnd - t.timeSt));
     }
-    if (DEBUG) {
-        // expectCost();
-        // waitListPrint();
-        // RejectOut();
-        stockAtTime();
-        // MaxTransDisc();
-        // mapPrint();
-        // outputUserTest();
-    }
+
+    // expectCost();
     input.close();
     output.close();
 
@@ -115,8 +95,8 @@ int main() {
         int bt = transferList[1][i].first;
         int &need = transferList[1][i].second;
         station[to].transferedTime[bt] = map[from][to];
-        output << "transfer " << from << " " << to << " " << toName(bt)
-               << " " << need << " 0\n";
+        output << "transfer " << from << " " << to << " " << toName(bt) << " "
+               << need << " 0\n";
         // cout << from << " " << to << " " << type << " " << need << "\n ";
         while (need--) {
             station[to].bikeID[bt].push(station[from].bikeID[bt].top());
@@ -192,8 +172,8 @@ int main() {
         } else if (t == "return") {
             // stationIdReturn userId timeReturn0-1440
             input >> ID >> userID >> time;
-            output << ID << " " << std::setfill('0') << std::setw(5)
-                   << userID << " " << time << "\n";
+            output << ID << " " << std::setfill('0') << std::setw(5) << userID
+                   << " " << time << "\n";
             bool x = station[ID].Return(userID, time);
         }
     }
@@ -204,98 +184,7 @@ int main() {
     output << money;
     output.close();
 }
-void stockAtTime() {
-    int t[3];
-    ofstream out;
-    out.open("stockTime.txt");
-    for (int i = 0; i <= maxStation; i++) {
-        if (station[i].sID != -1) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 1; k <= 1441; k++) {
-                    station[i].stockAtTime[k][j] +=
-                        station[i].stockAtTime[k - 1][j];
-                    station[i].stockAtTime[k - 1][j] += station[i].size[j];
-                }
-            }
-            for (int j = 0; j <= 1440; j++) {
-                if (j && t[0] == station[i].stockAtTime[j][0] &&
-                    t[1] == station[i].stockAtTime[j][1] &&
-                    t[2] == station[i].stockAtTime[j][2])
-                    continue;
-                out << i << "@" << j << ": ";
-                for (int k = 0; k < 3; k++) {
-                    t[k] = station[i].stockAtTime[j][k];
-                    out << t[k] << " ";
-                }
-                out << "\n";
-            }
-        }
-    }
-}
-void outputUserTest() {
-    ofstream out;
-    out.open("TEST.txt");
-    for (int i = 0; i < 100000; i++) {
-        if (user[i].type != -1) {
-            out << "User: " << i << " " << toName(user[i].type)
-                << " Time: " << user[i].timeSt << "-" << user[i].timeEnd
-                << " sOut-sIn: " << user[i].sOut << "->" << user[i].sIn << "\n";
-        }
-    }
-    out.close();
-}
-void MaxTransDisc() {
-    ofstream out;
-    out.open("maxTrans.txt");
-    for (int i = 0; i <= maxStation; i++) {
-        if (station[i].sID != -1) {
-            out << i << " ";
-            for (int j = 0; j < 3; j++) out << station[i].maxTransfer[j] << " ";
-            out << "\n";
-        }
-    }
-    out.close();
-}
-void RejectOut() {
-    ofstream outw;
-    outw.open("Rejected.txt");
-    for (int i = 0; i < Rej.size(); i++) {
-        User t = user[Rej[i]];
-        outw << "FROM: " << t.sOut << "->" << t.sIn << " TIME: " << t.timeSt
-             << "->" << t.timeEnd << " DIFF: " << t.timeEnd - t.timeSt << " "
-             << toName(t.type) << " ID: " << Rej[i] << "\n";
-    }
-    outw.close();
-}
-void mapPrint() {
-    ofstream out;
-    out.open("mapPrint.txt");
-    for (int i = 1; i <= maxStation; i++) {
-        for (int j = 1; j <= maxStation; j++) out << map[i][j] << " ";
-        out << "\n";
-    }
-    out.close();
-}
-void waitListPrint() {
-    ofstream out;
-    out.open("waitPrint.txt");
-    for (int i = 1; i <= maxStation; i++) {
-        out << i << ":\n";
-        for (int j = 0; j < 3; j++) {
-            bool x = station[i].waitList[j].size();
-            if (x) out << "Type " << j << ": ";
-            int k;
-            if (x) out << "(" << station[i].waitList[j].size() << ")";
-            while (!station[i].waitList[j].empty()) {
-                out << -station[i].waitList[j].top().first << ","
-                    << station[i].waitList[j].top().second << " ";
-                station[i].waitList[j].pop();
-            }
-            if (x) out << "\n";
-        }
-    }
-    out.close();
-}
+
 void expectCost() {
     ofstream out;
     out.open("costExpect.txt");
