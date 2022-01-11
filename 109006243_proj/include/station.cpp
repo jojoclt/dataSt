@@ -47,7 +47,7 @@ bool Station::Return(int ID, int time) {
     return true;
 }
 Vector<int> Station::fillBike(int ID, int x) {
-    Vector<int> arr(100);
+    Vector<int> arr;
     for (int i = 0; i < x; i++) {
         // already heap in bottom up fashion
         arr.push_back(toBike(ID, i));

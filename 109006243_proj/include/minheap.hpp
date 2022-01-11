@@ -10,7 +10,6 @@ template <typename T>
 class MinHeap {
    public:
     Vector<T> heap;
-    MinHeap(int capacity = 100);
     void push(T k);
     void pop();
     T top();

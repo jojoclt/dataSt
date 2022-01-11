@@ -5,11 +5,11 @@ int MinHeap<T>::Parent(int i) {
 }
 template <typename T>
 int MinHeap<T>::Left(int i) {
-    return 2 * i + 1;
+    return (2 * i) + 1;
 }
 template <typename T>
 int MinHeap<T>::Right(int i) {
-    return 2 * i + 2;
+    return (2 * i) + 2;
 }
 template <typename T>
 T MinHeap<T>::top() {
@@ -26,10 +26,6 @@ int MinHeap<T>::size() const {
 template <typename T>
 int MinHeap<T>::capacity() const {
     return heap.capacity();
-}
-template <typename T>
-MinHeap<T>::MinHeap(int cap) {
-    heap.reserve(cap);
 }
 template <typename T>
 void MinHeap<T>::heapify_down(int i) {

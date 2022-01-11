@@ -26,8 +26,8 @@ Station *station;
 bool rejectedUser[100000];
 bool firstTime = true;
 
-// string path = "./test_case/DS_testcase/open_basic3/test_case";
-string path = "./test_case";
+string path = "./test_case/DS_testcase/open_basic1/test_case";
+// string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
@@ -92,7 +92,7 @@ int main() {
     maxTransferOp();
 
     inputStation(input, path);
-    for (int i = 0; i < transferList[0].size(); i++) {
+    for (int i = 0; i < transferList[0].curr; i++) {
         int from = transferList[0][i].first, to = transferList[0][i].second;
         int bt = transferList[1][i].first;
         int &need = transferList[1][i].second;

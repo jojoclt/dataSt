@@ -6,8 +6,9 @@
 
 template <typename T>
 class Vector {
-   private:
-    T *first, *curr, *last;
+   public:
+    T* arr;
+    int curr, cap;
 
    public:
     friend std::ostream& operator<<(std::ostream& os, Vector<T>& v) {
@@ -15,22 +16,45 @@ class Vector {
         os << "\n";
         return os;
     }
-    Vector();
-    ~Vector();
-    Vector(int s);
+    Vector() {
+        arr = new T[1];
+        cap = 1, curr = 0;
+    }
 
-    Vector(const Vector<T>&);
+    Vector(const Vector<T>& obj) {
+        curr = obj.curr;
+        cap = obj.cap;
+        arr = new T[cap];
+        for (int i = 0; i < curr; i++) push_back(obj[i]);
+    }
+    Vector<T>& operator=(const Vector<T>& obj) {
+        curr = obj.curr;
+        cap = obj.cap;
+        arr = new T[cap];
+        for (int i = 0; i < curr; i++) push_back(obj[i]);
+        return *this;
+    }
 
-    T& operator[](const int pos) const { return first[pos]; }
-    Vector<T>& operator=(const Vector<T>&);
-    void push_back(T x);
-    void insert(int pos, T val);
-    void reserve(int new_capacity);
-    // Filling num
-    void resize(int new_size);
-    int size() const { return curr - first; }
-    int capacity() const { return last - first; }
-    void pop_back();
+    T& operator[](const int pos) const { return arr[pos]; }
+
+    void push_back(T x) {
+        if (curr == cap) {
+            T* temp = new T[2 * cap];
+            for (int i = 0; i < cap; i++) {
+                temp[i] = arr[i];
+            }
+            delete[] arr;
+            cap *= 2;
+            arr = temp;
+        }
+
+        arr[curr] = x;
+        curr++;
+    }
+
+    int size() const { return curr; }
+    int capacity() const { return cap; }
+    void pop_back() { curr--; }
 };
 
 #endif
