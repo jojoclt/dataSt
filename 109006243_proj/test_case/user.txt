@@ -1,0 +1,6 @@
+rent 3 lady 00002 0
+rent 2 electric 00001 0
+return 1 00001 35
+return 1 00002 85
+rent 3 electric 00003 90
+return 1 00003 1440
