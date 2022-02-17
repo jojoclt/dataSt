@@ -48,13 +48,16 @@ void inputStation(std::ifstream &os, std::string path) {
             // station[ID] = Station(ID, elecAmt, ladyAmt, roadAmt);
             maxStation = max(ID, maxStation);
         }
-        os.close();
         station = new Station[maxStation + 1];
+        os.close();
     }
     os.open(path + "/station.txt");
     while (os) {
         int ID, elecAmt, ladyAmt, roadAmt;
         os >> ID >> elecAmt >> ladyAmt >> roadAmt;
+        for (int i = 0; i < 3; i++) {
+            while (!station[ID].bikeID[i].empty()) station[ID].bikeID[i].pop();
+        }
         station[ID] = Station(ID, elecAmt, ladyAmt, roadAmt);
         // maxStation = max(ID, maxStation);
     }

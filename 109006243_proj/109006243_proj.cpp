@@ -10,14 +10,22 @@
 
 using namespace std;
 
-int costForDisc = 123456;
+int costForDisc = 12345678;
 int DEBUG = 0;
 int case2 = 1;
 int DEBUG3 = 1;
 int maxStation = 0;
 extern User user[100000];
 extern Vector<pii> transferList[2];
+Vector<int> addtoReturn;
+// a wait list for waiters
+Vector<int> addtoRent;
+Vector<int> arr[505];
+Vector<int> arrTime;
+int timeCount = 0;
+int rentCount = 0, returnCount = 0;
 void expectCost();
+void transfer(int time);
 /*
 g++ -g *.cpp ./include/*.cpp -o 109006243_proj -std=c++11
 ./109006243_proj
@@ -26,8 +34,8 @@ Station *station;
 bool rejectedUser[100000];
 bool firstTime = true;
 
-// string path = "./test_case/DS_testcase/open_basic3/test_case";
-string path = "./test_case";
+string path = "./test_case/DS_testcase/open_basic2/test_case";
+// string path = "./test_case";
 int main() {
     money = 0;
     ifstream input;
@@ -100,11 +108,16 @@ int main() {
         output << "transfer " << from << " " << to << " " << toName(bt) << " "
                << need << " 0\n";
         // cout << from << " " << to << " " << type << " " << need << "\n ";
+
         while (need--) {
-            station[to].bikeID[bt].push(station[from].bikeID[bt].top());
+            // u cant push now!
+
+            arr[i].push_back(station[from].bikeID[bt].top());
             station[from].bikeID[bt].pop();
         }
+        arrTime.push_back(map[from][to]);
     }
+    // debugger
 
     input.open(path + "/user.txt");
     while (input.good()) {
@@ -114,8 +127,28 @@ int main() {
         int ID, userID, time;
         string type;
         if (t == "rent") {
-            // stationIdRent bikeType userId(5digit) timeRent
             input >> ID >> type >> userID >> time;
+            transfer(time);
+            // waitlist for waiters
+            // while (rentCount < addtoRent.size()) {
+            //     User u = user[addtoRent[rentCount]];
+            //     if (u.waitTime + u.timeSt > time) break;
+            //     station[u.sOut].Rent(u.type, addtoRent[rentCount], u.timeSt,
+            //                          false, u.waitTime);
+            //     rentCount++;
+            // }
+            // // stationIdRent bikeType userId(5digit) timeRent
+            // // check IF TIME IS MORE THAN TOADD LIST
+            // while (returnCount < addtoReturn.size()) {
+            //     User t = user[addtoReturn[returnCount]];
+            //     if (time >= t.timeEnd + t.waitTime &&
+            //         t.timeEnd + t.waitTime <= 1440) {
+            //         station[ID].Return(addtoReturn[returnCount], t.timeEnd);
+            //         returnCount++;
+            //     } else
+            //         break;
+            // }
+
             Status x = station[ID].Rent(toBike(type), userID, time);
             output << ID << " " << type << " " << std::setfill('0')
                    << std::setw(5) << userID << " " << time;
@@ -141,13 +174,15 @@ int main() {
                         }
                     }
                 }
+
                 // WAIT
+
                 dt = station[ID].transferedTime[toBike(type)] - time;
                 if (time < station[ID].transferedTime[toBike(type)])
                     moneyWait = user[userID].Return(user[userID].timeEnd,
                                                     user[userID].sIn) -
                                 (waitFee * dt);
-
+                moneyWait = -1;
                 if (moneyDisc <= 0 && moneyWait <= 0) {
                     output << outputRes(x);
                 } else {
@@ -157,8 +192,14 @@ int main() {
                             output << outputRes(x);
                         else {
                             output << "\nwait\n";
-                            station[ID].Rent(toBike(type), userID, time, false,
-                                             dt);
+                            // YOU CANT RENT YET! YOU NEED TO GET THE BIKE AT
+                            // TIME
+                            // always prioritize wait! rent return implement
+                            addtoRent.push_back(userID);
+                            user[userID].waitTime = dt;
+                            // station[ID].Rent(toBike(type), userID, time,
+                            // false,
+                            //                  dt);
                         }
                     } else {
                         output << "\ndiscount " << toName(maxI) << "\n";
@@ -169,17 +210,35 @@ int main() {
             } else
                 output << outputRes(x);
 
-            // 1. discount
-            // TODO actually to know what to offer need to know
-            // the start and the end transfer or discount wait
-            // is hard offer discount on ppl accept is hard
-
         } else if (t == "return") {
+            // TIME TO RETURN GOR BUAK PAI
             // stationIdReturn userId timeReturn0-1440
             input >> ID >> userID >> time;
+            transfer(time);
+            // for waiter renters
+            // while (rentCount < addtoRent.size()) {
+            //     User u = user[addtoRent[rentCount]];
+            //     if (time < u.waitTime + u.timeSt) break;
+            //     station[u.sOut].Rent(u.type, addtoRent[rentCount], u.timeSt,
+            //                          false, u.waitTime);
+            //     rentCount++;
+            // }
+            // while (returnCount < addtoReturn.size()) {
+            //     User t = user[addtoReturn[returnCount]];
+            //     if (time >= t.timeEnd + t.waitTime &&
+            //         t.timeEnd + t.waitTime <= 1440) {
+            //         station[ID].Return(addtoReturn[returnCount], t.timeEnd);
+            //         returnCount++;
+            //     } else
+            //         break;
+            // }
             output << ID << " " << std::setfill('0') << std::setw(5) << userID
                    << " " << time << "\n";
-            bool x = station[ID].Return(userID, time);
+            if (user[ID].waitTime) {
+                // ADD TO LIST OF ADDERS // ALSO USER TIME
+                addtoReturn.push_back(userID);
+            } else
+                bool x = station[ID].Return(userID, time);
         }
     }
     // MaxTransDisc();
@@ -201,4 +260,17 @@ void expectCost() {
         out << "\n";
     }
     out.close();
+}
+
+void transfer(int time) {
+    for (int i = 0; i < arrTime.size(); i++) {
+        if (arrTime[i] != -1 && time >= arrTime[i]) {
+            // startTransfer
+            int to = transferList[0][i].second, bt = transferList[1][i].first;
+            for (int j = 0; j < arr[i].size(); j++) {
+                station[to].bikeID[bt].push(arr[i][j]);
+            }
+            arrTime[i] = -1;
+        }
+    }
 }

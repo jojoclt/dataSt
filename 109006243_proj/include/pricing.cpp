@@ -15,7 +15,7 @@ void initMap(int c) {
     map = new int *[c + 1];
     for (int i = 0; i <= c; i++) map[i] = new int[c + 1];
     for (int i = 0; i <= c; i++)
-        for (int j = 0; j <= c; j++) map[i][j] = 123456;
+        for (int j = 0; j <= c; j++) map[i][j] = 123456789;
     for (int i = 0; i <= c; i++) map[i][i] = 0;
 }
 

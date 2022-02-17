@@ -97,3 +97,4 @@ void Vector<T>::pop_back() {
 template class Vector<int>;
 template class Vector<pii>;
 template class Vector<User>;
+template class Vector<Vector<int>>;

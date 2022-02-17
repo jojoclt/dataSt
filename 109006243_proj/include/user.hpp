@@ -16,7 +16,7 @@ class User {
     int timeSt, timeEnd;
     int sIn, sOut;
     bool discount;
-    int waitTime;
+    int waitTime = 0;
     bool isRent;
 
    public:
